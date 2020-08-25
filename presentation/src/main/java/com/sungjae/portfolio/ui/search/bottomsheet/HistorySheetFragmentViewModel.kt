@@ -2,16 +2,18 @@ package com.sungjae.portfolio.ui.search.bottomsheet
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.sungjae.portfolio.R
 import com.sungjae.portfolio.base.BaseViewModel
 import com.sungjae.portfolio.components.ItemClickListener
 import com.sungjae.portfolio.components.Tabs
-import com.sungjae.portfolio.domain.repository.Repository
+import com.sungjae.portfolio.domain.exception.InvalidSingleException
+import com.sungjae.portfolio.domain.exception.InvalidTabTypeException
+import com.sungjae.portfolio.domain.usecase.GetContentQueriesUseCase
 import com.sungjae.portfolio.models.HistoryModel
-import io.reactivex.android.schedulers.AndroidSchedulers
 
-class HistoryViewModel(
+class HistorySheetFragmentViewModel(
     private val tab: Tabs,
-    private val repository: Repository
+    private val getContentQueriesUseCase: GetContentQueriesUseCase
 ) : BaseViewModel(), ItemClickListener {
 
     private val _searchHistoryResult = MutableLiveData<List<HistoryModel>>()
@@ -21,22 +23,28 @@ class HistoryViewModel(
     val clickedQuery: LiveData<String> get() = _clickedQuery
 
     fun getSearchQueryHistory() =
-        repository.getContentQueries(tab.name)
-            .observeOn(AndroidSchedulers.mainThread())
+        getContentQueriesUseCase.execute(tab.name)
             .subscribe({
                 _searchHistoryResult.value = mappingQuery(it)
-            }, {}).addDisposable()
+            }, {
+                mutableErrorMsg.value =
+                    when (it) {
+                        is InvalidSingleException -> R.string.error_single_fail
+                        is InvalidTabTypeException -> R.string.error_tab_fail
+                        else -> R.string.error_load_fail
+                    }
+            }).addDisposable()
 
     private fun mappingQuery(it: List<String>): ArrayList<HistoryModel> {
-        val historyList = ArrayList<HistoryModel>()
-        it.forEach { history ->
-            historyList.add(
-                HistoryModel(
-                    query = history
+        return ArrayList<HistoryModel>().also { arrayList ->
+            it.forEach { history ->
+                arrayList.add(
+                    HistoryModel(
+                        query = history
+                    )
                 )
-            )
+            }
         }
-        return historyList
     }
 
     override fun onClick(item: Any?) {

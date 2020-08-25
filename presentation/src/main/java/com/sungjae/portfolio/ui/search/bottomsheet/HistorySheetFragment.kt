@@ -16,13 +16,14 @@ import com.sungjae.portfolio.components.Tabs
 import com.sungjae.portfolio.databinding.FragmentHistorySheetBinding
 import com.sungjae.portfolio.extensions.addCallback
 import com.sungjae.portfolio.extensions.doOnApplyWindowInsets
+import com.sungjae.portfolio.extensions.toast
 import com.sungjae.portfolio.ui.search.ContentFragment
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
-class HistorySheetFragment : BaseFragment<FragmentHistorySheetBinding, HistoryViewModel>(R.layout.fragment_history_sheet) {
+class HistorySheetFragment : BaseFragment<FragmentHistorySheetBinding, HistorySheetFragmentViewModel>(R.layout.fragment_history_sheet) {
 
-    override val vm: HistoryViewModel by viewModel { parametersOf(getTab()) }
+    override val vm: HistorySheetFragmentViewModel by viewModel { parametersOf(getTab()) }
     private fun getTab(): Tabs = (requireParentFragment() as? ContentFragment)?.tab ?: error(getString(R.string.wrong_enum_type))
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -85,6 +86,10 @@ class HistorySheetFragment : BaseFragment<FragmentHistorySheetBinding, HistoryVi
             sheetExpand.setOnClickListener {
                 behavior.state = STATE_EXPANDED
             }
+
+            vm?.errorMsg?.observe(viewLifecycleOwner, Observer {
+                requireActivity().toast(getString(it))
+            })
 
             vm?.clickedQuery?.observe(viewLifecycleOwner, Observer { query ->
                 (requireParentFragment() as? ContentFragment)?.loadContentsByHistoryQuery(query)

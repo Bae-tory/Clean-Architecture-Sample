@@ -31,6 +31,10 @@ class ContentFragment : BaseFragment<FragmentContentBinding, ContentFragmentView
             if (it) requireActivity().toast(getString(R.string.error_load_fail))
         })
 
+        vm.errorMsg.observe(viewLifecycleOwner, Observer {
+            requireActivity().toast(getString(it))
+        })
+
         vm.invokeWebBrowser.observe(viewLifecycleOwner, Observer {
             ContextCompat.startActivity(requireContext(), Intent(Intent.ACTION_VIEW, Uri.parse(it)), null)
         })
@@ -44,7 +48,7 @@ class ContentFragment : BaseFragment<FragmentContentBinding, ContentFragmentView
 
     fun loadContentsByHistoryQuery(query: String?) {
         query?.let {
-            vm.loadContentsByHistory(it)
+            vm.loadContentByHistory(it)
         }
     }
 

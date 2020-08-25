@@ -10,7 +10,6 @@
         <variable
             name="vm"
             type="com.sungjae.portfolio.ui.search.ContentFragmentViewModel" />
-
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -46,9 +45,9 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_search"
                 style="@style/Widget.MaterialComponents.Button.TextButton"
+                onDebounceClick="@{() -> vm.loadContents()}"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:onClick="@{() -> vm.loadContents()}"
                 android:text="@string/search_text"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
                 app:layout_constraintEnd_toEndOf="parent"

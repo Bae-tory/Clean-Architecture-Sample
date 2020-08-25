@@ -11,7 +11,7 @@
 
         <variable
             name="vm"
-            type="com.sungjae.portfolio.ui.search.bottomsheet.HistoryViewModel" />
+            type="com.sungjae.portfolio.ui.search.bottomsheet.HistorySheetFragmentViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout

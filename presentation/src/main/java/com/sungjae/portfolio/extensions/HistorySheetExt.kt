@@ -17,7 +17,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_EXPANDE
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.shape.ShapeAppearanceModel
 import com.sungjae.portfolio.R
-import com.sungjae.portfolio.ui.search.bottomsheet.HistoryViewModel
+import com.sungjae.portfolio.ui.search.bottomsheet.HistorySheetFragmentViewModel
 import com.sungjae.portfolio.ui.search.bottomsheet.lerp
 import com.sungjae.portfolio.ui.search.bottomsheet.lerpArgb
 
@@ -43,7 +43,7 @@ fun View.setHistorySheet(
     @IdRes tvTitleId: Int,
     lifecycleOwner: LifecycleOwner,
     activity: FragmentActivity,
-    vm: HistoryViewModel
+    vm: HistorySheetFragmentViewModel
 ) {
     val sheet = findViewById<ConstraintLayout>(sheetId)
     val divider = findViewById<View>(dividerId)

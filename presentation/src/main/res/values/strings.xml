@@ -17,6 +17,9 @@
     <string name="please_write">검색어를 입력해주세요.</string>
     <string name="wrong_enum_type">탭 타입이 잘못되었습니다.</string>
     <string name="error_load_fail">데이터 로딩에 실패하였습니다.</string>
+    <string name="error_query_fail">잘못된 쿼리입니다.</string>
+    <string name="error_tab_fail">없는 탭입니다.</string>
+    <string name="error_single_fail">잘못된 싱글 데이터소스 입니다.</string>
     <string name="tv_result_sample">검색결과</string>
     <string name="tv_result_text">\'%s\'에 대한 검색 결과입니다.</string>
     <string name="empty">""</string>
