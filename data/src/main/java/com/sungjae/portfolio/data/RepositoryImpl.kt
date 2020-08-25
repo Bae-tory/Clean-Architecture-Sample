@@ -1,6 +1,5 @@
 package com.sungjae.portfolio.data
 
-import android.util.Log
 import com.sungjae.portfolio.data.models.toEntity
 import com.sungjae.portfolio.domain.entity.request.ContentEntity
 import com.sungjae.portfolio.domain.repository.Repository
@@ -53,10 +52,8 @@ class RepositoryImpl(
     override fun getContents(type: String, query: String): Single<ContentEntity> =
         loadRemoteContents(type, query)
 
-    override fun getContentsByHistory(type: String, query: String): Single<ContentEntity> {
-        Log.d("getContentsByHistory","${localDataSource.getLocalContents(type, query)}")
-        return localDataSource.getLocalContents(type, query)
-    }
+    override fun getContentsByHistory(type: String, query: String): Single<ContentEntity> =
+        localDataSource.getLocalContents(type, query)
 
     override fun getContentQueries(type: String): Single<List<String>> =
         localDataSource.getContentQueries(type)

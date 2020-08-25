@@ -6,6 +6,8 @@ import android.view.View
 import androidx.core.view.doOnLayout
 import androidx.lifecycle.Observer
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_COLLAPSED
+import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_EXPANDED
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.shape.ShapeAppearanceModel
 import com.sungjae.portfolio.R
@@ -20,8 +22,8 @@ import org.koin.core.parameter.parametersOf
 
 class HistorySheetFragment : BaseFragment<FragmentHistorySheetBinding, HistoryViewModel>(R.layout.fragment_history_sheet) {
 
-    private fun getTab(): Tabs = (requireParentFragment() as? ContentFragment)?.tab ?: error(getString(R.string.wrong_enum_type))
     override val vm: HistoryViewModel by viewModel { parametersOf(getTab()) }
+    private fun getTab(): Tabs = (requireParentFragment() as? ContentFragment)?.tab ?: error(getString(R.string.wrong_enum_type))
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -29,7 +31,7 @@ class HistorySheetFragment : BaseFragment<FragmentHistorySheetBinding, HistoryVi
             val behavior = BottomSheetBehavior.from(historySheet)
             val backCallback =
                 requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, false) {
-                    behavior.state = BottomSheetBehavior.STATE_COLLAPSED
+                    behavior.state = STATE_COLLAPSED
                 }
 
             val historyStartColor = historySheet.context.getColor(R.color.history_200)
@@ -47,8 +49,8 @@ class HistorySheetFragment : BaseFragment<FragmentHistorySheetBinding, HistoryVi
 
                 behavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
                     override fun onStateChanged(bottomSheet: View, newState: Int) {
-                        backCallback.isEnabled = newState == BottomSheetBehavior.STATE_EXPANDED
-                        if (newState == BottomSheetBehavior.STATE_EXPANDED) {
+                        backCallback.isEnabled = newState == STATE_EXPANDED
+                        if (newState == STATE_EXPANDED) {
                             vm?.getSearchQueryHistory()
                         }
                     }
@@ -75,19 +77,18 @@ class HistorySheetFragment : BaseFragment<FragmentHistorySheetBinding, HistoryVi
                 historySheet.doOnApplyWindowInsets { _, insets, _, _ ->
                     behavior.peekHeight = peek + insets.systemWindowInsetBottom
                 }
-
             } // doOnLayout
 
             ivCollapseHistorylist.setOnClickListener {
-                behavior.state = BottomSheetBehavior.STATE_COLLAPSED
+                behavior.state = STATE_COLLAPSED
             }
             sheetExpand.setOnClickListener {
-                behavior.state = BottomSheetBehavior.STATE_EXPANDED
+                behavior.state = STATE_EXPANDED
             }
 
             vm?.clickedQuery?.observe(viewLifecycleOwner, Observer { query ->
                 (requireParentFragment() as? ContentFragment)?.loadContentsByHistoryQuery(query)
-                BottomSheetBehavior.from(binding.historySheet).state = BottomSheetBehavior.STATE_COLLAPSED
+                BottomSheetBehavior.from(binding.historySheet).state = STATE_COLLAPSED
             })
         } // end of bind
     }
