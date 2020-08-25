@@ -1,5 +1,6 @@
 package com.sungjae.portfolio.ui.search.bottomsheet
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.sungjae.portfolio.base.BaseViewModel
@@ -40,7 +41,7 @@ class HistoryViewModel(
     }
 
     override fun onClick(item: Any?) {
+        Log.d("HistoryViewModelonClick", "$item")
         _clickedQuery.value = (item as? HistoryModel)?.query
-
     }
 }

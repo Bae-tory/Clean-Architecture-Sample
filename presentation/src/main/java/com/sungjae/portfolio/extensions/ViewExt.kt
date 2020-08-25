@@ -1,13 +1,10 @@
 package com.sungjae.portfolio.extensions
 
 import android.content.Context
-import android.content.Intent
-import android.net.Uri
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowInsets
 import android.view.inputmethod.InputMethodManager
-import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import com.sungjae.portfolio.R
 import com.sungjae.portfolio.components.ThrottleFirstClickListener
@@ -67,9 +64,12 @@ fun View.requestApplyInsetsWhenAttached() {
 fun View.setOnThrottleClickListener(listener: View.OnClickListener) {
     setOnClickListener(ThrottleFirstClickListener {
         it.run(listener::onClick)
-    }
-    )
-//    setOnClickListener(throttleFirst(destinationFunction = listener::onClick))
+    })
+}
+
+@BindingAdapter("onDebounceClick")
+fun View.setOnDebounceClickListener(listener: View.OnClickListener) {
+    setOnClickListener(debounce(invokedFunc = listener::onClick))
 }
 
 fun <T> throttleFirst(
@@ -110,7 +110,7 @@ fun <T> throttleLatest(
 
 fun <T> debounce(
     waitMs: Long = 500L,
-    coroutineScope: CoroutineScope,
+    coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Main),
     invokedFunc: (T) -> Unit
 ): (T) -> Unit {
     var debounceJob: Job? = null

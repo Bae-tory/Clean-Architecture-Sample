@@ -45,8 +45,7 @@ class HistorySheetFragment : BaseFragment<FragmentHistorySheetBinding, HistoryVi
                 val maxTranslationX = (it.width - peek).toFloat()
                 historySheet.translationX = (historySheet.width - peek).toFloat()
 
-                behavior.addBottomSheetCallback(object :
-                    BottomSheetBehavior.BottomSheetCallback() {
+                behavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
                     override fun onStateChanged(bottomSheet: View, newState: Int) {
                         backCallback.isEnabled = newState == BottomSheetBehavior.STATE_EXPANDED
                         if (newState == BottomSheetBehavior.STATE_EXPANDED) {
