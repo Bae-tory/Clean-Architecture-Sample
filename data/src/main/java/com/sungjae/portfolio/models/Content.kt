@@ -1,4 +1,4 @@
-package com.sungjae.portfolio.domain.entity.request
+package com.sungjae.portfolio.models
 
 data class Content(
     val query: String,
@@ -10,5 +10,6 @@ data class ContentItem(
     val actor: String = "",
     val description: String = "",
     val title: String = "",
-    val link: String = ""
+    val link: String = "",
+    val isThumbnailVisible: Boolean = false
 )

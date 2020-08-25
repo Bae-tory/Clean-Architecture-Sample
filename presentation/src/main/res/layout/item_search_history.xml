@@ -4,8 +4,17 @@
     <data>
 
         <variable
+            name="vm"
+            type="com.sungjae.portfolio.ui.search.bottomsheet.HistoryViewModel" />
+
+        <variable
             name="item"
             type="com.sungjae.portfolio.models.HistoryModel" />
+
+        <variable
+            name="eventHolder"
+            type="com.sungjae.portfolio.components.ItemClickListener" />
+
     </data>
 
     <LinearLayout

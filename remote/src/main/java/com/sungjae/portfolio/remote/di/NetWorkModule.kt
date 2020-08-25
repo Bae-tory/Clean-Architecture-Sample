@@ -22,9 +22,6 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
-private const val userAgent = "User-Agent"
-private const val Header = ""
-
 val networkModule = module {
 
     single { Cache(androidApplication().cacheDir, cacheSize) }
@@ -43,7 +40,8 @@ val networkModule = module {
         val request =
             chain.request()
                 .newBuilder()
-                .addHeader(userAgent, Header)
+                .addHeader("X-Naver-Client-Id", BuildConfig.NAVER_CLIENT_ID)
+                .addHeader("X-Naver-Client-Secret", BuildConfig.NAVER_CLIENT_SECRET)
                 .build()
 
         chain.proceed(request)

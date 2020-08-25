@@ -72,6 +72,9 @@ dependencies {
 
     //Image
     implementation(Libs.PICASSO)
+    implementation(Libs.GLIDE)
+    implementation(Libs.GLIDE_COMPILER)
+    implementation(Libs.GLIDE_OKHTTP_INTERGRATION)
 
     //DI
     implementation(Libs.KOIN_VIEWMODEL)
@@ -91,8 +94,6 @@ dependencies {
     implementation(TestLibs.JUNIT)
     implementation(TestLibs.JUNIT_EXT)
     implementation(TestLibs.ESPRESSO)
-    implementation(Libs.GOOGLE_MAPS)
-    implementation(Libs.GOOGLE_LOCATION)
     implementation(Libs.FIREBASE_ANALYTICS)
     implementation(Libs.FIREBASE_CRASHLYTICS)
 

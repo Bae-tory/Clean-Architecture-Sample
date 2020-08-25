@@ -49,7 +49,6 @@ abstract class BaseDialogHelper<Dialog : BaseDialogHelper<Dialog, B, VM>, B : Vi
         dialog = AlertDialog.Builder(context).setView(binding.root).setCancelable(cancelable).create()
         val bgRes = if (isBackgroundTransparent) android.R.color.transparent else android.R.color.black
         dialog?.window?.setBackgroundDrawableResource(bgRes)
-        if (bottomAnim) dialog?.window?.attributes?.windowAnimations = R.style.dialogAnim
     }
 
     protected fun bind(action: B.() -> Unit) {

@@ -77,4 +77,5 @@ dependencies {
     implementation(TestLibs.ESPRESSO)
 
     implementation(project(":data"))
+    implementation(project(":domain"))
 }

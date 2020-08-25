@@ -12,6 +12,10 @@
             type="Object" />
 
         <variable
+            name="eventHolder"
+            type="Object" />
+
+        <variable
             name="vm"
             type="Object" />
 

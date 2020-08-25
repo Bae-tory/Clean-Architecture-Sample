@@ -1,11 +1,11 @@
-package com.sungjae.portfolio.data.models
+package com.sungjae.portfolio.domain.entity.request
 
 data class ContentEntity(
     val query: String,
-    val contentItems: List<ContentItem>
+    val contentEntityItems: List<ContentEntityItem>
 )
 
-data class ContentItem(
+data class ContentEntityItem(
     val image: String = "",
     val actor: String = "",
     val description: String = "",

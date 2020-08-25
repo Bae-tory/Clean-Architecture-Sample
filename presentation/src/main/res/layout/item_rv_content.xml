@@ -17,12 +17,16 @@
             type="com.sungjae.portfolio.ui.search.ContentFragmentViewModel" />
 
         <variable
+            name="eventHolder"
+            type="com.sungjae.portfolio.components.ItemClickListener" />
+
+        <variable
             name="item"
             type="com.sungjae.portfolio.models.ContentItem" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        startWebBrowser="@{item.link}"
+        onThrottleClick="@{()-> eventHolder.onClick(item)}"
         android:layout_width="match_parent"
         android:layout_height="80dp"
         tools:context=".ui.tabs.ContentAdapter">
@@ -79,6 +83,7 @@
                 app:layout_constraintTop_toBottomOf="@id/tv_title"
                 bind:setTextHtml="@{item.actor + item.description}"
                 tools:text="설명" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

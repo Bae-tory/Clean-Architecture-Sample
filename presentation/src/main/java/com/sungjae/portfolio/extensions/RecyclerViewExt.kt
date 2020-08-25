@@ -3,6 +3,7 @@ package com.sungjae.portfolio.extensions
 import android.view.MotionEvent
 import androidx.annotation.LayoutRes
 import androidx.databinding.BindingAdapter
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.sungjae.portfolio.base.BaseRecyclerViewAdapter
 
@@ -16,6 +17,7 @@ import com.sungjae.portfolio.base.BaseRecyclerViewAdapter
     "bindFooterItemLayout",
     "bindVm",
     "enableTouch",
+    "bindEventHolder",
     requireAll = false
 )
 fun RecyclerView.setRecyclerViewAdapter(
@@ -26,16 +28,17 @@ fun RecyclerView.setRecyclerViewAdapter(
     footerItem: Any? = null,
     @LayoutRes footerItemRes: Int? = null,
     vm: Any? = null,
-    enableTouch: Boolean = true
+    enableTouch: Boolean = true,
+    eventHolder: Any? = null
 ) {
     val adapter = adapter as? BaseRecyclerViewAdapter ?: BaseRecyclerViewAdapter()
-    adapter.contentItem = contentItem
     adapter.contentLayoutResId = contentItemRes
     adapter.headerItem = headerItem
     adapter.headerLayoutResId = headerItemRes
     adapter.footerItem = footerItem
     adapter.footerLayoutResId = footerItemRes
     adapter.vm = vm
+    adapter.eventHolder = eventHolder ?: vm
 
     this.adapter = adapter
 
@@ -44,12 +47,9 @@ fun RecyclerView.setRecyclerViewAdapter(
         adapter.notifyDataSetChanged()
     }
 
+    addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+
     addOnItemTouchListener(object : RecyclerView.SimpleOnItemTouchListener() {
         override fun onInterceptTouchEvent(view: RecyclerView, e: MotionEvent) = enableTouch
     })
-}
-
-@BindingAdapter("setItemDecor")
-fun RecyclerView.setItemDecorwithPageId(value: String? = null) {
-
 }

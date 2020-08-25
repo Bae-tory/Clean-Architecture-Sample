@@ -1,6 +1,8 @@
 package com.sungjae.portfolio.data
 
-import com.sungjae.portfolio.domain.entity.request.Request
+import android.util.Log
+import com.sungjae.portfolio.data.models.toEntity
+import com.sungjae.portfolio.domain.entity.request.ContentEntity
 import com.sungjae.portfolio.domain.repository.Repository
 import io.reactivex.Single
 
@@ -10,23 +12,15 @@ class RepositoryImpl(
     private val contentDataSource: ContentDataSource
 ) : Repository {
 
-    //Remote
-    override fun checkDevice(request: Request): Single<Request> = Single.error(Exception(""))
-
     override fun clearData() {
         localDataSource.clearData()
     }
 
-
     //Local
     override fun getString(key: String) = localDataSource.getString(key)
-
     override fun getInt(key: String) = localDataSource.getInt(key)
-
     override fun getLong(key: String) = localDataSource.getLong(key)
-
     override fun getBoolean(key: String) = localDataSource.getBoolean(key)
-
     override fun putString(key: String, data: String) {
         localDataSource.putString(key, data)
     }
@@ -45,10 +39,28 @@ class RepositoryImpl(
 
     //Content
     override fun getVersionName(): String = contentDataSource.getVersionName()
-
     override fun getVersionCode(): Int = contentDataSource.getVersionCode()
-
     override fun getDeviceId(): String? = contentDataSource.getDeviceId()
-
     override fun getSDKVersion(): String = contentDataSource.getSDKVersion()
+
+    private fun loadRemoteContents(type: String, query: String): Single<ContentEntity> =
+        remoteDataSource.getRemoteContents(type, query)
+            .flatMap { response ->
+                localDataSource.saveContents(type, query, response)
+                    .toSingle { response.toEntity() }
+            }
+
+    override fun getContents(type: String, query: String): Single<ContentEntity> =
+        loadRemoteContents(type, query)
+
+    override fun getContentsByHistory(type: String, query: String): Single<ContentEntity> {
+        Log.d("getContentsByHistory","${localDataSource.getLocalContents(type, query)}")
+        return localDataSource.getLocalContents(type, query)
+    }
+
+    override fun getContentQueries(type: String): Single<List<String>> =
+        localDataSource.getContentQueries(type)
+
+    override fun getCache(type: String): Single<ContentEntity> =
+        localDataSource.getCacheContents(type)
 }

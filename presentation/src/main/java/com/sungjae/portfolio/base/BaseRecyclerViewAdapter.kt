@@ -8,9 +8,9 @@ open class BaseRecyclerViewAdapter : RecyclerView.Adapter<BaseViewHolder>() {
 
     protected open val items = mutableListOf<Any>()
     var headerItem: Any? = null
-    var contentItem: Any? = null
     var footerItem: Any? = null
     var vm: Any? = null
+    var eventHolder: Any? = null
 
     private var headerCount: Int = 0
 
@@ -47,7 +47,7 @@ open class BaseRecyclerViewAdapter : RecyclerView.Adapter<BaseViewHolder>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
-        return object : BaseViewHolder(viewType, parent) {}
+        return object : BaseViewHolder(parent, viewType) {}
     }
 
     override fun getItemCount(): Int = items.count() + headerCount + footerCount
@@ -58,7 +58,7 @@ open class BaseRecyclerViewAdapter : RecyclerView.Adapter<BaseViewHolder>() {
             isFooterPosition(position) -> footerItem
             else -> items[position - headerCount]
         }
-        holder.onBindViewHolder(item, vm)
+        holder.onBindViewHolder(item, vm, eventHolder)
     }
 
     protected fun getItem(position: Int): Any =

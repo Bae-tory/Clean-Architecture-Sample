@@ -20,11 +20,15 @@ android {
                 isDebuggable = true
                 isMinifyEnabled = false
                 proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
+                buildConfigField("String", "NAVER_CLIENT_ID", "\"cb6vgtmAXB0EgAX3Bbjv\"")
+                buildConfigField("String", "NAVER_CLIENT_SECRET", "\"sP5Byv5r87\"")
                 buildConfigField("String", "BASE_URL", "\"https://openapi.naver.com/\"")
             }
             getByName(BuildTypes.RELEASE) {
                 isMinifyEnabled = false
                 proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
+                buildConfigField("String", "NAVER_CLIENT_ID", "\"cb6vgtmAXB0EgAX3Bbjv\"")
+                buildConfigField("String", "NAVER_CLIENT_SECRET", "\"sP5Byv5r87\"")
                 buildConfigField("String", "BASE_URL", "\"https://openapi.naver.com/\"")
             }
         }
@@ -75,4 +79,5 @@ dependencies {
     implementation(TestLibs.ESPRESSO)
 
     implementation(project(":data"))
+    implementation(project(":domain"))
 }

@@ -1,5 +1,6 @@
 package com.sungjae.portfolio.base
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
@@ -12,7 +13,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.sungjae.portfolio.BR
 
 
-open class BaseViewHolder(@LayoutRes layoutRes: Int, parent: ViewGroup) : RecyclerView.ViewHolder(LayoutInflater.from(parent.context).inflate(layoutRes, parent, false)),
+open class BaseViewHolder(parent: ViewGroup, @LayoutRes layoutResForViewType: Int) :
+    RecyclerView.ViewHolder(LayoutInflater.from(parent.context).inflate(layoutResForViewType, parent, false)),
     LifecycleOwner {
 
     private val binding: ViewDataBinding = DataBindingUtil.bind(itemView)!!
@@ -20,14 +22,17 @@ open class BaseViewHolder(@LayoutRes layoutRes: Int, parent: ViewGroup) : Recycl
 
     open fun onBindViewHolder(
         item: Any?,
-        vm: Any?
+        vm: Any?,
+        eventHolder: Any?
     ) {
         item?.let {
+            Log.d("onBindViewHolder", "$it")
             with(binding) {
                 lifecycleOwner = this@BaseViewHolder
                 setVariable(BR.index, adapterPosition)
                 setVariable(BR.item, item)
                 setVariable(BR.vm, vm)
+                setVariable(BR.eventHolder, eventHolder)
                 executePendingBindings()
             }
         }

@@ -1,11 +1,10 @@
 package com.sungjae.portfolio.domain.repository
 
-import com.sungjae.portfolio.domain.entity.request.Content
+import com.sungjae.portfolio.domain.entity.request.ContentEntity
 import io.reactivex.Single
 
 
 interface Repository {
-    //Local
     fun getString(key: String): String?
     fun getInt(key: String): Int
     fun getLong(key: String): Long
@@ -24,9 +23,8 @@ interface Repository {
     fun getDeviceId(): String?
     fun getSDKVersion(): String
 
-    //Remote
-    fun getContents(type: String, query: String): Single<Content>
-    fun getContentsByHistory(type: String, query: String): Single<Content>
+    fun getContents(type: String, query: String): Single<ContentEntity>
+    fun getContentsByHistory(type: String, query: String): Single<ContentEntity>
     fun getContentQueries(type: String): Single<List<String>>
-    fun getCache(type: String): Single<Content>
+    fun getCache(type: String): Single<ContentEntity>
 }

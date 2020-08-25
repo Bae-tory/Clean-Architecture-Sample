@@ -2,45 +2,19 @@ package com.sungjae.portfolio.extensions
 
 import android.content.Context
 import android.content.Intent
-import android.content.res.ColorStateList
-import android.graphics.Color
 import android.net.Uri
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowInsets
 import android.view.inputmethod.InputMethodManager
-import android.widget.Button
-import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import com.sungjae.portfolio.R
-
-fun View.setTextColor(color: Int?) {
-    color?.let {
-        when (this) {
-            is TextView -> setTextColor(ContextCompat.getColor(context, it))
-            is Button -> setTextColor(ContextCompat.getColor(context, it))
-        }
-    }
-}
-
-fun View.setBgColor(color: Int?) {
-    color?.let { setBackgroundColor(ContextCompat.getColor(context, it)) }
-
-}
-
-fun View.setBgDrawable(resourceId: Int?) {
-    resourceId?.let { background = ContextCompat.getDrawable(context, it) }
-}
-
-fun View.setBgTint(colorCode: String?) {
-    colorCode?.let { backgroundTintList = ColorStateList.valueOf(Color.parseColor("#$it")) }
-}
-
+import com.sungjae.portfolio.components.ThrottleFirstClickListener
+import kotlinx.coroutines.*
 
 class InitialPadding(val left: Int, val top: Int, val right: Int, val bottom: Int)
 class InitialMargin(val left: Int, val top: Int, val right: Int, val bottom: Int)
-
 
 @BindingAdapter("hideKeyboard")
 fun View.hideKeyboard(value: Any? = null) {
@@ -89,17 +63,62 @@ fun View.requestApplyInsetsWhenAttached() {
     }
 }
 
-@BindingAdapter("onClick")
-fun View.onClick(url: String) {
-    setOnClickListener {
-        url.let { url ->
-            ContextCompat.startActivity(
-                context,
-                Intent(
-                    Intent.ACTION_VIEW, Uri.parse(url)
-                ),
-                null
-            )
+@BindingAdapter("onThrottleClick")
+fun View.setOnThrottleClickListener(listener: View.OnClickListener) {
+    setOnClickListener(ThrottleFirstClickListener {
+        it.run(listener::onClick)
+    }
+    )
+//    setOnClickListener(throttleFirst(destinationFunction = listener::onClick))
+}
+
+fun <T> throttleFirst(
+    skipMs: Long = 500L,
+    coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Main),
+    invokedFunc: (T) -> Unit
+
+): (T) -> Unit {
+    var throttleJob: Job? = null
+    return { param: T ->
+        if (throttleJob?.isCompleted != false) {
+            throttleJob = coroutineScope.launch {
+                invokedFunc(param)
+                delay(skipMs)
+            }
+        }
+    }
+}
+
+fun <T> throttleLatest(
+    intervalMs: Long = 500L,
+    coroutineScope: CoroutineScope,
+    invokedFunc: (T) -> Unit
+): (T) -> Unit {
+    var throttleJob: Job? = null
+    var latestParam: T
+    return { param: T ->
+        latestParam = param
+        if (throttleJob?.isCompleted != false) {
+            throttleJob = coroutineScope.launch {
+                delay(intervalMs)
+//                invokedFunc(latestParam) 도 사용가능
+                latestParam.let(invokedFunc)
+            }
+        }
+    }
+}
+
+fun <T> debounce(
+    waitMs: Long = 500L,
+    coroutineScope: CoroutineScope,
+    invokedFunc: (T) -> Unit
+): (T) -> Unit {
+    var debounceJob: Job? = null
+    return { param: T ->
+        debounceJob?.cancel()
+        debounceJob = coroutineScope.launch {
+            delay(waitMs)
+            invokedFunc(param)
         }
     }
 }
