@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Portfolio</string>
-    <string name="search_text">검 색</string>
+    <string name="search_text">검색</string>
+    <string name="search_history">검색 기록</string>
     <string name="tab_blog">블로그</string>
     <string name="tab_news">뉴스</string>
     <string name="tab_movie">영화</string>

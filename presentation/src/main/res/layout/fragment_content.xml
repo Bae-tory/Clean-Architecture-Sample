@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -10,7 +9,8 @@
 
         <variable
             name="vm"
-            type="com.sungjae.portfolio.ui.search.SearchViewModel" />
+            type="com.sungjae.portfolio.ui.search.ContentFragmentViewModel" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -19,10 +19,10 @@
         tools:context=".ui.tabs.ContentFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/layout_search"
+            android:id="@+id/lay_search_top"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@id/rv_contents"
+            app:layout_constraintBottom_toTopOf="@id/rv_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -48,9 +48,9 @@
                 style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:text="@string/please_write"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
                 android:onClick="@{() -> vm.loadContents()}"
+                android:text="@string/search_text"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_weight="2"
                 app:layout_constraintStart_toEndOf="@id/et_search"
@@ -59,7 +59,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ProgressBar
-            android:id="@+id/progress_circular"
+            android:id="@+id/progress_loading"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:visibility="@{vm.isShowLoadingProgressBar() ? View.VISIBLE : View.GONE}"
@@ -70,24 +70,26 @@
 
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_contents"
-            android:layout_width="match_parent"
+            android:id="@+id/rv_content"
+            bindContentItem="@{vm.searchQueryResultList}"
+            bindContentItemLayout="@{@layout/item_rv_content}"
+            bindVm="@{vm}"
+            android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layoutManager="LinearLayoutManager"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/layout_search"
+            app:layout_constraintTop_toBottomOf="@id/lay_search_top"
             app:layout_constraintVertical_chainStyle="spread"
             app:layout_constraintVertical_weight="9"
-            bind:replaceAll="@{vm.searchQueryResultList}"
-            bind:setHasFixedSize="@{true}"
-            tools:listitem="@layout/rv_content_item" />
+            tools:listitem="@layout/item_rv_content" />
 
         <fragment
-            android:id="@+id/history_sheet"
+            android:id="@+id/fragment_history_sheet"
             android:name="com.sungjae.portfolio.ui.search.bottomsheet.HistorySheetFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:layout="@layout/fg_history_sheet" />
+            tools:layout="@layout/fragment_history_sheet" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -4,8 +4,8 @@
     <data>
 
         <variable
-            name="query"
-            type="String" />
+            name="item"
+            type="com.sungjae.portfolio.models.HistoryModel" />
     </data>
 
     <LinearLayout
@@ -18,9 +18,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
+            android:text="@{item.query}"
             android:textAlignment="center"
             android:textColor="@color/history_font_color"
-            android:text="@{query}"
             android:textSize="15dp" />
     </LinearLayout>
 </layout>
