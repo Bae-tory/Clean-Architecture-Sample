@@ -27,7 +27,7 @@ class HistorySheetFragmentViewModel(
             .subscribe({
                 _searchHistoryResult.value = mappingQuery(it)
             }, {
-                mutableErrorMsg.value =
+                _errorMsg.value =
                     when (it) {
                         is InvalidSingleException -> R.string.error_single_fail
                         is InvalidTabTypeException -> R.string.error_tab_fail

@@ -10,8 +10,8 @@ abstract class BaseViewModel : ViewModel() {
 
     private val disposable = CompositeDisposable()
 
-    protected val mutableErrorMsg = MutableLiveData<Int>()
-    val errorMsg: LiveData<Int> get() = mutableErrorMsg
+    protected val _errorMsg = MutableLiveData<Int>()
+    val errorMsg: LiveData<Int> get() = _errorMsg
 
     protected fun Disposable.addDisposable() {
         disposable.add(this)

@@ -46,7 +46,7 @@ class ContentFragmentViewModel(
             .subscribe({
                 _searchQueryResultList.value = mappingContentItem(it)
             }, {
-                mutableErrorMsg.value =
+                _errorMsg.value =
                     when (it) {
                         is InvalidQueryException -> R.string.error_query_fail
                         is InvalidSingleException -> R.string.error_single_fail
@@ -62,7 +62,7 @@ class ContentFragmentViewModel(
                 _searchQueryResultList.value = mappingContentItem(it)
                 searchQuery.value = it.query
             }, {
-                mutableErrorMsg.value =
+                _errorMsg.value =
                     when (it) {
                         is InvalidSingleException -> R.string.error_single_fail
                         is InvalidTabTypeException -> R.string.error_tab_fail
