@@ -15,7 +15,8 @@ import com.sungjae.portfolio.domain.exception.InvalidSingleException
 import com.sungjae.portfolio.domain.exception.InvalidTabTypeException
 import com.sungjae.portfolio.domain.usecase.GetCacheContentUseCase
 import com.sungjae.portfolio.domain.usecase.GetContentUseCase
-import com.sungjae.portfolio.domain.usecase.LoadContentByHistory
+import com.sungjae.portfolio.domain.usecase.LoadContentByHistoryUseCase
+import com.sungjae.portfolio.mapper.ContentPresenterMapper
 import com.sungjae.portfolio.models.ContentItem
 
 
@@ -23,8 +24,8 @@ class ContentFragmentViewModel(
     private val tab: Tabs,
     private val getContentUseCase: GetContentUseCase,
     private val getCacheContentUseCase: GetCacheContentUseCase,
-    private val loadContentByHistory: LoadContentByHistory
-) : BaseViewModel(), ItemClickListener {
+    private val loadContentByHistoryUseCase: LoadContentByHistoryUseCase
+) : BaseViewModel(), ItemClickListener, ContentPresenterMapper<ContentEntity, ArrayList<ContentItem>> {
 
     private val _searchQueryResultList = MutableLiveData<List<ContentItem>>()
     val searchQueryResultList: LiveData<List<ContentItem>> get() = _searchQueryResultList
@@ -40,11 +41,12 @@ class ContentFragmentViewModel(
     val isResultEmptyError: LiveData<Boolean> = Transformations.map(searchQueryResultList) { it.isNullOrEmpty() }
 
     fun loadContents() {
-        getContentUseCase.execute(Pair(tab.name, searchQuery.value))
+        getContentUseCase
+            .execute(Pair(tab.name, searchQuery.value))
             .doOnSubscribe { _isShowLoadingProgressBar.value = true }
             .doAfterTerminate { _isShowLoadingProgressBar.value = false }
             .subscribe({
-                _searchQueryResultList.value = mappingContentItem(it)
+                _searchQueryResultList.value = toDomain(it)
             }, {
                 _errorMsg.value =
                     when (it) {
@@ -57,9 +59,10 @@ class ContentFragmentViewModel(
     }
 
     fun getCacheContents() {
-        getCacheContentUseCase.execute(tab.name)
+        getCacheContentUseCase
+            .execute(tab.name)
             .subscribe({
-                _searchQueryResultList.value = mappingContentItem(it)
+                _searchQueryResultList.value = toDomain(it)
                 searchQuery.value = it.query
             }, {
                 _errorMsg.value =
@@ -72,9 +75,10 @@ class ContentFragmentViewModel(
     }
 
     fun loadContentByHistory(query: String) {
-        loadContentByHistory.execute(Pair(tab.name, query))
+        loadContentByHistoryUseCase
+            .execute(Pair(tab.name, query))
             .subscribe({
-                _searchQueryResultList.value = mappingContentItem(it)
+                _searchQueryResultList.value = toDomain(it)
                 searchQuery.value = it.query
                 loadContents()
             }, {
@@ -91,9 +95,9 @@ class ContentFragmentViewModel(
         _invokeWebBrowser.value = (item as ContentItem).link
     }
 
-    private fun mappingContentItem(contentEntity: ContentEntity): ArrayList<ContentItem> {
-        return ArrayList<ContentItem>().also { arrayList ->
-            contentEntity.contentEntityItems.forEach { entity ->
+    override fun toDomain(data: ContentEntity): ArrayList<ContentItem> =
+        ArrayList<ContentItem>().also { arrayList ->
+            data.contentEntityItems.forEach { entity ->
                 arrayList.add(
                     ContentItem(
                         image = entity.image,
@@ -109,5 +113,4 @@ class ContentFragmentViewModel(
                 )
             }
         }
-    }
 }
