@@ -9,7 +9,7 @@ import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
-class LoadContentByHistory(
+class LoadContentByHistoryUseCase(
     private val repository: Repository,
     executorScheduler: Scheduler = Schedulers.io(),
     postExecutionScheduler: Scheduler = AndroidSchedulers.mainThread()

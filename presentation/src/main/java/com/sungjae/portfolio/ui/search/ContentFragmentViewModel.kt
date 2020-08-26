@@ -15,7 +15,7 @@ import com.sungjae.portfolio.domain.exception.InvalidSingleException
 import com.sungjae.portfolio.domain.exception.InvalidTabTypeException
 import com.sungjae.portfolio.domain.usecase.GetCacheContentUseCase
 import com.sungjae.portfolio.domain.usecase.GetContentUseCase
-import com.sungjae.portfolio.domain.usecase.LoadContentByHistory
+import com.sungjae.portfolio.domain.usecase.LoadContentByHistoryUseCase
 import com.sungjae.portfolio.models.ContentItem
 
 
@@ -23,7 +23,7 @@ class ContentFragmentViewModel(
     private val tab: Tabs,
     private val getContentUseCase: GetContentUseCase,
     private val getCacheContentUseCase: GetCacheContentUseCase,
-    private val loadContentByHistory: LoadContentByHistory
+    private val loadContentByHistoryUseCase: LoadContentByHistoryUseCase
 ) : BaseViewModel(), ItemClickListener {
 
     private val _searchQueryResultList = MutableLiveData<List<ContentItem>>()
@@ -40,7 +40,8 @@ class ContentFragmentViewModel(
     val isResultEmptyError: LiveData<Boolean> = Transformations.map(searchQueryResultList) { it.isNullOrEmpty() }
 
     fun loadContents() {
-        getContentUseCase.execute(Pair(tab.name, searchQuery.value))
+        getContentUseCase
+            .execute(Pair(tab.name, searchQuery.value))
             .doOnSubscribe { _isShowLoadingProgressBar.value = true }
             .doAfterTerminate { _isShowLoadingProgressBar.value = false }
             .subscribe({
@@ -57,7 +58,8 @@ class ContentFragmentViewModel(
     }
 
     fun getCacheContents() {
-        getCacheContentUseCase.execute(tab.name)
+        getCacheContentUseCase
+            .execute(tab.name)
             .subscribe({
                 _searchQueryResultList.value = mappingContentItem(it)
                 searchQuery.value = it.query
@@ -72,7 +74,8 @@ class ContentFragmentViewModel(
     }
 
     fun loadContentByHistory(query: String) {
-        loadContentByHistory.execute(Pair(tab.name, query))
+        loadContentByHistoryUseCase
+            .execute(Pair(tab.name, query))
             .subscribe({
                 _searchQueryResultList.value = mappingContentItem(it)
                 searchQuery.value = it.query

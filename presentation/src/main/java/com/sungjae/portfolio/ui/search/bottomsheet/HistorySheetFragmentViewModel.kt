@@ -23,7 +23,8 @@ class HistorySheetFragmentViewModel(
     val clickedQuery: LiveData<String> get() = _clickedQuery
 
     fun getSearchQueryHistory() =
-        getContentQueriesUseCase.execute(tab.name)
+        getContentQueriesUseCase
+            .execute(tab.name)
             .subscribe({
                 _searchHistoryResult.value = mappingQuery(it)
             }, {
