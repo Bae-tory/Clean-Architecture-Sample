@@ -8,6 +8,7 @@ import com.sungjae.portfolio.domain.entity.request.ContentEntity
 import com.sungjae.portfolio.domain.entity.request.ContentEntityItem
 import com.sungjae.portfolio.local.extensions.convertToGson
 import com.sungjae.portfolio.local.extensions.convertToJson
+import com.sungjae.portfolio.local.mapper.ContentLocalMapper
 import com.sungjae.portfolio.local.room.ContentDao
 import com.sungjae.portfolio.local.room.ContentLocal
 import io.reactivex.Completable
@@ -17,16 +18,12 @@ import io.reactivex.schedulers.Schedulers
 class LocalDataSourceImpl(
     private val pref: SharedPreferences,
     private val contentDao: ContentDao
-) : LocalDataSource {
+) : LocalDataSource, ContentLocalMapper<ContentLocal, ContentEntity, Content> {
+
     override fun getCacheContents(type: String): Single<ContentEntity> =
         contentDao.getContentCache(type)
             .onErrorReturn { ContentLocal.empty(type, "") }
-            .map {
-                ContentEntity(
-                    it.query,
-                    convertToGson<ContentEntityItem>(convertToJson(it.list)).toList()
-                )
-            }
+            .map { it.toDomain() }
             .toSingle()
             .subscribeOn(Schedulers.io())
 
@@ -39,23 +36,12 @@ class LocalDataSourceImpl(
     override fun getLocalContents(type: String, query: String): Single<ContentEntity> =
         contentDao.getContents(type, query)
             .onErrorReturn { ContentLocal.empty(type, query) }
-            .map {
-                ContentEntity(
-                    it.query,
-                    convertToGson<ContentEntityItem>(convertToJson(it.list)).toList()
-                )
-            }.toSingle()
+            .map { it.toDomain() }
+            .toSingle()
             .subscribeOn(Schedulers.io())
 
     override fun saveContents(type: String, query: String, response: Content): Completable =
-        contentDao.insertContent(
-            ContentLocal(
-                System.currentTimeMillis(),
-                response.contentItems,
-                type,
-                query
-            )
-        )
+        contentDao.insertContent(response.fromData(type, query))
 
 
     override fun getString(key: String) = pref.getString(key, null)
@@ -63,6 +49,7 @@ class LocalDataSourceImpl(
     override fun getLong(key: String) = pref.getLong(key, -1L)
     override fun getBoolean(key: String) = pref.getBoolean(key, false)
     override fun putString(key: String, data: String) {
+
         pref.edit {
             putString(key, data)
         }
@@ -91,4 +78,18 @@ class LocalDataSourceImpl(
             clear()
         }
     }
+
+    override fun ContentLocal.toDomain(): ContentEntity =
+        ContentEntity(
+            this.query,
+            convertToGson<ContentEntityItem>(convertToJson(this.list)).toList()
+        )
+
+    override fun Content.fromData(type: String, query: String): ContentLocal =
+        ContentLocal(
+            id = System.currentTimeMillis(),
+            list = this.contentItems,
+            type = type,
+            query = query
+        )
 }

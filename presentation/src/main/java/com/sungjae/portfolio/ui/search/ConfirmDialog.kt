@@ -7,8 +7,8 @@ import com.sungjae.portfolio.databinding.DialogConfirmBinding
 
 class ConfirmDialog(
     context: Context,
-    override val vm: SearchViewModel
-) : BaseDialogHelper<ConfirmDialog, DialogConfirmBinding, SearchViewModel>(R.layout.dialog_confirm, context) {
+    override val vm: ContentViewModel
+) : BaseDialogHelper<ConfirmDialog, DialogConfirmBinding, ContentViewModel>(R.layout.dialog_confirm, context) {
 
     override fun show() {
 

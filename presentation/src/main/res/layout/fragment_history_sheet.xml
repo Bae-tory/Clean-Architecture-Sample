@@ -96,6 +96,7 @@
                 bindContentItem="@{vm.searchHistoryResult}"
                 bindContentItemLayout="@{@layout/item_search_history}"
                 bindVm="@{vm}"
+                hasfixedSize="@{true}"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:alpha="0"

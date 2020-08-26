@@ -1,15 +1,18 @@
 package com.sungjae.portfolio.data
 
-import com.sungjae.portfolio.data.models.toEntity
+import com.sungjae.portfolio.data.models.Content
+import com.sungjae.portfolio.data.models.ContentItem
 import com.sungjae.portfolio.domain.entity.request.ContentEntity
+import com.sungjae.portfolio.domain.entity.request.ContentEntityItem
 import com.sungjae.portfolio.domain.repository.Repository
+import com.sungjae.portfolio.mapper.ContentDataMapper
 import io.reactivex.Single
 
 class RepositoryImpl(
     private val localDataSource: LocalDataSource,
     private val remoteDataSource: RemoteDataSource,
     private val contentDataSource: ContentDataSource
-) : Repository {
+) : Repository, ContentDataMapper<Content, ContentEntity> {
 
     override fun clearData() {
         localDataSource.clearData()
@@ -29,6 +32,8 @@ class RepositoryImpl(
     }
 
     override fun putLong(key: String, data: Long) {
+        val content = Content("", listOf(ContentItem()))
+        content.toDomain()
         localDataSource.putLong(key, data)
     }
 
@@ -46,7 +51,7 @@ class RepositoryImpl(
         remoteDataSource.getRemoteContents(type, query)
             .flatMap { response ->
                 localDataSource.saveContents(type, query, response)
-                    .toSingle { response.toEntity() }
+                    .toSingle { response.toDomain() }
             }
 
     override fun getContents(type: String, query: String): Single<ContentEntity> =
@@ -60,4 +65,33 @@ class RepositoryImpl(
 
     override fun getCache(type: String): Single<ContentEntity> =
         localDataSource.getCacheContents(type)
+
+    override fun Content.toDomain(): ContentEntity =
+        ContentEntity(
+            query = this.query,
+            contentEntityItems = this.contentItems.map {
+                ContentEntityItem(
+                    image = it.image,
+                    actor = it.actor,
+                    description = it.description,
+                    title = it.title,
+                    link = it.link
+                )
+            }
+        )
+
+    override fun ContentEntity.fromDomain(): Content =
+        Content(
+            query = this.query,
+            contentItems = this.contentEntityItems.map {
+                ContentItem(
+                    image = it.image,
+                    actor = it.actor,
+                    description = it.description,
+                    title = it.title,
+                    link = it.link
+                )
+            }
+        )
+
 }

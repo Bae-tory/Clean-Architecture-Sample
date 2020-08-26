@@ -4,7 +4,7 @@ import com.sungjae.portfolio.components.Tabs
 import com.sungjae.portfolio.providers.ResourceProvider
 import com.sungjae.portfolio.providers.ResourceProviderImpl
 import com.sungjae.portfolio.ui.search.ContentFragmentViewModel
-import com.sungjae.portfolio.ui.search.SearchViewModel
+import com.sungjae.portfolio.ui.search.ContentViewModel
 import com.sungjae.portfolio.ui.search.TabFragmentViewModel
 import com.sungjae.portfolio.ui.search.bottomsheet.HistorySheetFragmentViewModel
 import org.koin.android.ext.koin.androidApplication
@@ -15,7 +15,7 @@ val viewModelModule = module {
 
     single<ResourceProvider> { ResourceProviderImpl(androidApplication()) }
 
-    viewModel { SearchViewModel() }
+    viewModel { ContentViewModel() }
 
     viewModel { (tab: Tabs) -> ContentFragmentViewModel(tab, get(), get(), get()) }
     viewModel { (tab: Tabs) -> HistorySheetFragmentViewModel(tab, get()) }

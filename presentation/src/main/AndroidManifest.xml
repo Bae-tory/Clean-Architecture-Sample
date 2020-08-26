@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ui.search.SearchActivity"
+            android:name=".ui.search.ContentActivity"
             android:configChanges="keyboardHidden|keyboard|screenSize"
             android:theme="@style/Theme.Contents"
             android:windowSoftInputMode="adjustNothing">

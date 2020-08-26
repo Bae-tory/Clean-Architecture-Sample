@@ -18,6 +18,7 @@ import com.sungjae.portfolio.base.BaseRecyclerViewAdapter
     "bindVm",
     "enableTouch",
     "bindEventHolder",
+    "hasfixedSize",
     requireAll = false
 )
 fun RecyclerView.setRecyclerViewAdapter(
@@ -29,7 +30,8 @@ fun RecyclerView.setRecyclerViewAdapter(
     @LayoutRes footerItemRes: Int? = null,
     vm: Any? = null,
     enableTouch: Boolean = true,
-    eventHolder: Any? = null
+    eventHolder: Any? = null,
+    hasFixedSize: Boolean = false
 ) {
     val adapter = adapter as? BaseRecyclerViewAdapter ?: BaseRecyclerViewAdapter()
     adapter.contentLayoutResId = contentItemRes
@@ -41,6 +43,7 @@ fun RecyclerView.setRecyclerViewAdapter(
     adapter.eventHolder = eventHolder ?: vm
 
     this.adapter = adapter
+    this.setHasFixedSize(hasFixedSize)
 
     contentItem?.let {
         adapter.updateData(it)
