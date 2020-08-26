@@ -34,14 +34,14 @@ fun <T> Throwable.toErrorResult(): Result<T> =
 
 fun <T> Result<T>.toDataSingle(): Single<T> =
     when (this) {
-        is Result.OnSuccess -> Single.just(this.data)
-        is Result.OnError -> Single.error(this.error.toThrowable())
+        is Result.OnSuccess<T> -> Single.just(this.data)
+        is Result.OnError<T> -> Single.error(this.error.toThrowable())
     }
 
 fun <T> Result<T>.toSingle(): Single<Result<T>> =
     when (this) {
-        is Result.OnSuccess -> Single.just(this)
-        is Result.OnError -> Single.error(this.error.toThrowable())
+        is Result.OnSuccess<T> -> Single.just(this)
+        is Result.OnError<T> -> Single.error(this.error.toThrowable())
     }
 
 fun <T> T.toResult(): Result<T> = Result.OnSuccess(this)
