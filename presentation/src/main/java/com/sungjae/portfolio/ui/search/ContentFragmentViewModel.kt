@@ -3,21 +3,20 @@ package com.sungjae.portfolio.ui.search
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
+import androidx.lifecycle.viewModelScope
 import com.sungjae.portfolio.R
 import com.sungjae.portfolio.base.BaseViewModel
 import com.sungjae.portfolio.components.ItemClickListener
 import com.sungjae.portfolio.components.SingleLiveEvent
 import com.sungjae.portfolio.components.Tabs
 import com.sungjae.portfolio.domain.entity.request.ContentEntity
-import com.sungjae.portfolio.domain.exception.InvalidQueryBlankException
-import com.sungjae.portfolio.domain.exception.InvalidQueryException
-import com.sungjae.portfolio.domain.exception.InvalidSingleException
-import com.sungjae.portfolio.domain.exception.InvalidTabTypeException
+import com.sungjae.portfolio.domain.exception.*
 import com.sungjae.portfolio.domain.usecase.GetCacheContentUseCase
 import com.sungjae.portfolio.domain.usecase.GetContentUseCase
 import com.sungjae.portfolio.domain.usecase.LoadContentByHistoryUseCase
 import com.sungjae.portfolio.mapper.ContentPresenterMapper
 import com.sungjae.portfolio.models.ContentItem
+import kotlinx.coroutines.launch
 
 
 class ContentFragmentViewModel(
@@ -41,54 +40,61 @@ class ContentFragmentViewModel(
     val isResultEmptyError: LiveData<Boolean> = Transformations.map(searchQueryResultList) { it.isNullOrEmpty() }
 
     fun loadContents() {
-        getContentUseCase
-            .execute(Pair(tab.name, searchQuery.value))
-            .doOnSubscribe { _isShowLoadingProgressBar.value = true }
-            .doAfterTerminate { _isShowLoadingProgressBar.value = false }
-            .subscribe({
-                _searchQueryResultList.value = toDomain(it)
-            }, {
-                _errorMsg.value =
-                    when (it) {
-                        is InvalidQueryException -> R.string.error_query_fail
-                        is InvalidSingleException -> R.string.error_single_fail
-                        is InvalidQueryBlankException -> R.string.please_write
-                        else -> R.string.error_load_fail
-                    }
-            }).addDisposable()
+        viewModelScope.launch(ioDispatchers) {
+            when (val result = getContentUseCase.execute(Pair(tab.name, searchQuery.value))) {
+                is Result.OnSuccess -> {
+                    _searchQueryResultList.value = toDomain(result.data)
+                }
+                is Result.OnError -> {
+                    _errorMsg.value =
+                        when (result.exception) {
+                            is InvalidQueryException -> R.string.error_query_fail
+                            is InvalidSingleException -> R.string.error_single_fail
+                            is InvalidQueryBlankException -> R.string.please_write
+                            else -> R.string.error_load_fail
+                        }
+                }
+            }
+        }
     }
 
     fun getCacheContents() {
-        getCacheContentUseCase
-            .execute(tab.name)
-            .subscribe({
-                _searchQueryResultList.value = toDomain(it)
-                searchQuery.value = it.query
-            }, {
-                _errorMsg.value =
-                    when (it) {
-                        is InvalidSingleException -> R.string.error_single_fail
-                        is InvalidTabTypeException -> R.string.error_tab_fail
-                        else -> R.string.error_load_fail
-                    }
-            }).addDisposable()
+        viewModelScope.launch(ioDispatchers) {
+            when (val result = getCacheContentUseCase.execute(tab.name)) {
+                is Result.OnSuccess -> {
+                    _searchQueryResultList.value = toDomain(result.data)
+                    searchQuery.value = result.data.query
+                }
+                is Result.OnError -> {
+                    _errorMsg.value =
+                        when (result.exception) {
+                            is InvalidSingleException -> R.string.error_single_fail
+                            is InvalidTabTypeException -> R.string.error_tab_fail
+                            else -> R.string.error_load_fail
+                        }
+                }
+            }
+        }
     }
 
     fun loadContentByHistory(query: String) {
-        loadContentByHistoryUseCase
-            .execute(Pair(tab.name, query))
-            .subscribe({
-                _searchQueryResultList.value = toDomain(it)
-                searchQuery.value = it.query
-                loadContents()
-            }, {
-                when (it) {
-                    is InvalidQueryException -> R.string.error_query_fail
-                    is InvalidTabTypeException -> R.string.error_tab_fail
-                    is InvalidSingleException -> R.string.error_single_fail
-                    else -> R.string.error_load_fail
+        viewModelScope.launch(ioDispatchers) {
+            when (val result = loadContentByHistoryUseCase.execute(Pair(tab.name, query))) {
+                is Result.OnSuccess -> {
+                    _searchQueryResultList.value = toDomain(result.data)
+                    searchQuery.value = result.data.query
+                    loadContents()
                 }
-            }).addDisposable()
+                is Result.OnError -> {
+                    when (result.exception) {
+                        is InvalidQueryException -> R.string.error_query_fail
+                        is InvalidTabTypeException -> R.string.error_tab_fail
+                        is InvalidSingleException -> R.string.error_single_fail
+                        else -> R.string.error_load_fail
+                    }
+                }
+            }
+        }
     }
 
     override fun onClick(item: Any?) {
