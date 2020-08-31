@@ -89,6 +89,7 @@ dependencies {
     //Coroutine
     implementation(Libs.COROUTINE_CORE)
     implementation(Libs.COROUTINE_ANDROID)
+    implementation(Libs.LIFECYCLE_VIEWMODEL_KTX)
 
     //Test
     implementation(TestLibs.JUNIT)

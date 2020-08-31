@@ -72,6 +72,10 @@ dependencies {
     //DI
     implementation(Libs.KOIN_VIEWMODEL)
 
+    //Coroutine
+    implementation(Libs.COROUTINE_CORE)
+    implementation(Libs.COROUTINE_ANDROID)
+
     // Logger
     implementation(Libs.LOGGER)
 
