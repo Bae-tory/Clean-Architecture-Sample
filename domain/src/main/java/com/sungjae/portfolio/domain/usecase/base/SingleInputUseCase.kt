@@ -7,7 +7,7 @@ import io.reactivex.Single
 abstract class SingleInputUseCase<T, in Params>(
     private val executorSchedulers: Scheduler,
     private val postExecutionScheduler: Scheduler
-) : RemoteBaseUseCase<Params>() {
+) : BaseSingleUseCase<Params>() {
 
     protected abstract fun buildUseCaseInputSingle(params: Params): Single<T>?
 
