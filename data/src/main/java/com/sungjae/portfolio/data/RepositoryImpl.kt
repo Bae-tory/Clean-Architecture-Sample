@@ -1,12 +1,13 @@
 package com.sungjae.portfolio.data
 
+import android.util.Log
 import com.sungjae.portfolio.data.models.Content
 import com.sungjae.portfolio.data.models.ContentItem
 import com.sungjae.portfolio.domain.entity.request.ContentEntity
 import com.sungjae.portfolio.domain.entity.request.ContentEntityItem
+import com.sungjae.portfolio.domain.exception.Result
 import com.sungjae.portfolio.domain.repository.Repository
 import com.sungjae.portfolio.mapper.ContentDataMapper
-import io.reactivex.Single
 
 class RepositoryImpl(
     private val localDataSource: LocalDataSource,
@@ -47,23 +48,27 @@ class RepositoryImpl(
     override fun getDeviceId(): String? = contentDataSource.getDeviceId()
     override fun getSDKVersion(): String = contentDataSource.getSDKVersion()
 
-    private fun loadRemoteContents(type: String, query: String): Single<ContentEntity> =
-        remoteDataSource.getRemoteContents(type, query)
-            .flatMap { response ->
+    private suspend fun loadRemoteContents(type: String, query: String): Result<ContentEntity> {
+        return when (val response = remoteDataSource.getRemoteContents(type, query)) {
+            is Result.OnSuccess -> {
+                Log.d("Result.OnSuccess", "$response")
                 localDataSource.saveContents(type, query, response)
-                    .toSingle { response.toDomain() }
+                Result.OnSuccess(response.data.toDomain())
             }
+            is Result.OnError -> throw Exception("Error Remote Contents")
+        }
+    }
 
-    override fun getContents(type: String, query: String): Single<ContentEntity> =
+    override suspend fun getContents(type: String, query: String): Result<ContentEntity> =
         loadRemoteContents(type, query)
 
-    override fun getContentsByHistory(type: String, query: String): Single<ContentEntity> =
+    override suspend fun getContentsByHistory(type: String, query: String): Result<ContentEntity> =
         localDataSource.getLocalContents(type, query)
 
-    override fun getContentQueries(type: String): Single<List<String>> =
+    override suspend fun getContentQueries(type: String): Result<List<String>> =
         localDataSource.getContentQueries(type)
 
-    override fun getCache(type: String): Single<ContentEntity> =
+    override suspend fun getCache(type: String): Result<ContentEntity> =
         localDataSource.getCacheContents(type)
 
     override fun Content.toDomain(): ContentEntity =

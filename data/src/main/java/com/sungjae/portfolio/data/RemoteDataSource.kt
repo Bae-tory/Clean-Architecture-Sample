@@ -1,10 +1,9 @@
 package com.sungjae.portfolio.data
 
 import com.sungjae.portfolio.data.models.Content
-import com.sungjae.portfolio.domain.entity.request.ContentEntity
-import io.reactivex.Single
+import com.sungjae.portfolio.domain.exception.Result
 
 
 interface RemoteDataSource {
-    fun getRemoteContents(type: String, query: String): Single<Content>
+    suspend fun getRemoteContents(type: String, query: String): Result<Content>
 }

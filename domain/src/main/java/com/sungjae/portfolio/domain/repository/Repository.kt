@@ -1,7 +1,7 @@
 package com.sungjae.portfolio.domain.repository
 
 import com.sungjae.portfolio.domain.entity.request.ContentEntity
-import io.reactivex.Single
+import com.sungjae.portfolio.domain.exception.Result
 
 
 interface Repository {
@@ -23,8 +23,8 @@ interface Repository {
     fun getDeviceId(): String?
     fun getSDKVersion(): String
 
-    fun getContents(type: String, query: String): Single<ContentEntity>
-    fun getContentsByHistory(type: String, query: String): Single<ContentEntity>
-    fun getContentQueries(type: String): Single<List<String>>
-    fun getCache(type: String): Single<ContentEntity>
+    suspend fun getContents(type: String, query: String): Result<ContentEntity>
+    suspend fun getContentsByHistory(type: String, query: String): Result<ContentEntity>
+    suspend fun getContentQueries(type: String): Result<List<String>>
+    suspend fun getCache(type: String): Result<ContentEntity>
 }
