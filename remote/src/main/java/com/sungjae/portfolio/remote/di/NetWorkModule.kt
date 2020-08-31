@@ -73,7 +73,7 @@ val networkModule = module {
         Retrofit.Builder()
             .client(get<OkHttpClient>())
             .addConverterFactory(get())
-            .addCallAdapterFactory(get())
+//            .addCallAdapterFactory(get())
             .baseUrl(BuildConfig.BASE_URL)
             .build()
     }
