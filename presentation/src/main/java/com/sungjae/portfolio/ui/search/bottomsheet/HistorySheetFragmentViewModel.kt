@@ -2,14 +2,17 @@ package com.sungjae.portfolio.ui.search.bottomsheet
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.sungjae.portfolio.R
 import com.sungjae.portfolio.base.BaseViewModel
 import com.sungjae.portfolio.components.ItemClickListener
 import com.sungjae.portfolio.components.Tabs
 import com.sungjae.portfolio.domain.exception.InvalidSingleException
 import com.sungjae.portfolio.domain.exception.InvalidTabTypeException
+import com.sungjae.portfolio.domain.exception.Result
 import com.sungjae.portfolio.domain.usecase.GetContentQueriesUseCase
 import com.sungjae.portfolio.models.HistoryModel
+import kotlinx.coroutines.launch
 
 class HistorySheetFragmentViewModel(
     private val tab: Tabs,
@@ -23,18 +26,19 @@ class HistorySheetFragmentViewModel(
     val clickedQuery: LiveData<String> get() = _clickedQuery
 
     fun getSearchQueryHistory() =
-        getContentQueriesUseCase
-            .execute(tab.name)
-            .subscribe({
-                _searchHistoryResult.value = mappingQuery(it)
-            }, {
-                _errorMsg.value =
-                    when (it) {
-                        is InvalidSingleException -> R.string.error_single_fail
-                        is InvalidTabTypeException -> R.string.error_tab_fail
-                        else -> R.string.error_load_fail
-                    }
-            }).addDisposable()
+        viewModelScope.launch {
+            when (val result = getContentQueriesUseCase.execute(tab.name)) {
+                is Result.OnSuccess -> _searchHistoryResult.value = mappingQuery(result.data)
+                is Result.OnError -> {
+                    _errorMsg.value =
+                        when (result.exception) {
+                            is InvalidSingleException -> R.string.error_single_fail
+                            is InvalidTabTypeException -> R.string.error_tab_fail
+                            else -> R.string.error_load_fail
+                        }
+                }
+            }
+        }
 
     private fun mappingQuery(it: List<String>): ArrayList<HistoryModel> {
         return ArrayList<HistoryModel>().also { arrayList ->
