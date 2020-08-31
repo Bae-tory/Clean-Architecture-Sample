@@ -38,5 +38,13 @@ open class BaseViewHolder(parent: ViewGroup, @LayoutRes layoutResForViewType: In
         }
     }
 
+    fun onAttach() {
+        lifecycleRegistry.currentState = Lifecycle.State.RESUMED
+    }
+
+    fun onDetach() {
+        lifecycleRegistry.currentState = Lifecycle.State.CREATED
+    }
+
     override fun getLifecycle(): Lifecycle = lifecycleRegistry
 }

@@ -52,6 +52,16 @@ open class BaseRecyclerViewAdapter : RecyclerView.Adapter<BaseViewHolder>() {
 
     override fun getItemCount(): Int = items.count() + headerCount + footerCount
 
+    override fun onViewAttachedToWindow(holder: BaseViewHolder) {
+        holder.onAttach()
+        super.onViewAttachedToWindow(holder)
+    }
+
+    override fun onViewDetachedFromWindow(holder: BaseViewHolder) {
+        holder.onDetach()
+        super.onViewDetachedFromWindow(holder)
+    }
+
     override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
         val item = when {
             isHeaderPosition(position) -> headerItem
@@ -60,6 +70,7 @@ open class BaseRecyclerViewAdapter : RecyclerView.Adapter<BaseViewHolder>() {
         }
         holder.onBindViewHolder(item, vm, eventHolder)
     }
+
 
     protected fun getItem(position: Int): Any =
         items.getOrNull(position) ?: throw ArrayIndexOutOfBoundsException()
