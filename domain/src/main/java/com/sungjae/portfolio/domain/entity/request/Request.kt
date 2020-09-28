@@ -4,11 +4,6 @@ import com.google.gson.annotations.SerializedName
 
 
 data class Request(
-    @SerializedName("DeviceId")
-    val deviceId: String? = null,
-    @SerializedName("DeviceTok")
-    val deviceToken: String? = null,
-    @SerializedName("VipIdx")
     val vipIdx: String? = null,
     @SerializedName("PageId")
     val pageId: String? = null,
