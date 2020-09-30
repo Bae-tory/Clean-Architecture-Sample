@@ -44,7 +44,7 @@ object Versions {
     const val RX_JAVA2: String = "2.2.13"
     const val RX_ANDROID: String = "2.1.1"
     const val RX_KOTLIN: String = "2.4.0"
-    const val LIFECYCLE_VIEWMODEL_KTX = "2.1.0-beta01"
+    const val LIFECYCLE_VIEWMODEL_KTX = "2.2.0"
     const val ROOM: String = "2.2.5"
     const val PICASSO: String = "2.71828"
     const val GLIDE: String = "4.11.0"
