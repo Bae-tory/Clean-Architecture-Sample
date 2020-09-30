@@ -6,28 +6,12 @@ import com.orhanobut.logger.FormatStrategy
 import com.orhanobut.logger.Logger
 import com.orhanobut.logger.PrettyFormatStrategy
 import com.sungjae.portfolio.BuildConfig
-import com.sungjae.portfolio.content.di.contentDataSourceModule
-import com.sungjae.portfolio.data.di.dataModule
-import com.sungjae.portfolio.extensions.setUpKoin
-import com.sungjae.portfolio.local.di.localDataSourceModule
-import com.sungjae.portfolio.remote.di.networkModule
-import com.sungjae.portfolio.remote.di.remoteDataSourceModule
+import dagger.hilt.android.HiltAndroidApp
 
+@HiltAndroidApp
 class App : Application() {
     override fun onCreate() {
         super.onCreate()
-        setUpKoin(
-            this@App,
-            viewModelModule,
-            dataModule,
-            useCaseModule,
-            contentDataSourceModule,
-            localDataSourceModule,
-            remoteDataSourceModule,
-            networkModule,
-            dialogModule
-        )
-
         setAndroidLogger()
     }
 

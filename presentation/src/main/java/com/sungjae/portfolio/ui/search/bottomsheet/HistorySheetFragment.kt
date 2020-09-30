@@ -18,12 +18,13 @@ import com.sungjae.portfolio.extensions.addCallback
 import com.sungjae.portfolio.extensions.doOnApplyWindowInsets
 import com.sungjae.portfolio.extensions.toast
 import com.sungjae.portfolio.ui.search.ContentFragment
-import org.koin.android.viewmodel.ext.android.viewModel
-import org.koin.core.parameter.parametersOf
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class HistorySheetFragment : BaseFragment<FragmentHistorySheetBinding, HistorySheetFragmentViewModel>(R.layout.fragment_history_sheet) {
 
     override val vm: HistorySheetFragmentViewModel by viewModel { parametersOf(getTab()) }
+
     private fun getTab(): Tabs = (requireParentFragment() as? ContentFragment)?.tab ?: error(getString(R.string.wrong_enum_type))
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

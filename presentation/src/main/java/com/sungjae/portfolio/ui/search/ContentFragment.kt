@@ -13,12 +13,14 @@ import com.sungjae.portfolio.components.Constants.TAB_TYPE
 import com.sungjae.portfolio.components.Tabs
 import com.sungjae.portfolio.databinding.FragmentContentBinding
 import com.sungjae.portfolio.extensions.toast
-import org.koin.android.viewmodel.ext.android.viewModel
-import org.koin.core.parameter.parametersOf
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ContentFragment : BaseFragment<FragmentContentBinding, ContentFragmentViewModel>(R.layout.fragment_content) {
 
     override val vm: ContentFragmentViewModel by viewModel { parametersOf(tab) }
+
+    private val vmSample : ContentFragmentViewModel by viewModles
 
     val tab: Tabs by lazy {
         arguments?.get(TAB_TYPE) as? Tabs ?: error(getString(R.string.wrong_enum_type))

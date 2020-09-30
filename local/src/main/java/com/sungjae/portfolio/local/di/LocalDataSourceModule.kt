@@ -7,7 +7,6 @@ import com.sungjae.portfolio.data.LocalDataSource
 import com.sungjae.portfolio.local.LocalDataSourceImpl
 import com.sungjae.portfolio.local.room.ContentDataBase
 import org.koin.android.ext.koin.androidApplication
-import org.koin.dsl.module
 
 val localDataSourceModule = module {
 

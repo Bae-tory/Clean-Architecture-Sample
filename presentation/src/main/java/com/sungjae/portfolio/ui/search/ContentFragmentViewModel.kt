@@ -1,5 +1,6 @@
 package com.sungjae.portfolio.ui.search
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
@@ -19,7 +20,8 @@ import com.sungjae.portfolio.models.ContentItem
 import kotlinx.coroutines.launch
 
 
-class ContentFragmentViewModel(
+class ContentFragmentViewModel
+@ViewModelInject constructor(
     private val tab: Tabs,
     private val getContentUseCase: GetContentUseCase,
     private val getCacheContentUseCase: GetCacheContentUseCase,

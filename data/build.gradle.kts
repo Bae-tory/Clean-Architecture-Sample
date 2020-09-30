@@ -3,6 +3,7 @@ plugins {
     kotlin("android")
     kotlin("android.extensions")
     kotlin("kapt")
+    id("dagger.hilt.android.plugin")
 }
 
 android {
@@ -70,7 +71,11 @@ dependencies {
     implementation(Libs.GSON)
 
     //DI
-    implementation(Libs.KOIN_VIEWMODEL)
+    implementation(Libs.HILT_ANDROID)
+    kapt(Libs.HILT_ANDROID_COMPILER)
+    implementation(Libs.HILT_VIEWMODEL)
+    implementation(Libs.HILT_COMMON)
+    kapt(Libs.HILT_COMPILER)
 
     //Coroutine
     implementation(Libs.COROUTINE_CORE)
