@@ -26,7 +26,7 @@ class HistorySheetFragmentViewModel(
     val clickedQuery: LiveData<String> get() = _clickedQuery
 
     fun getSearchQueryHistory() =
-        viewModelScope.launch {
+        viewModelScope.launch(exceptionDispatchers) {
             when (val result = getContentQueriesUseCase.execute(tab.name)) {
                 is Result.OnSuccess -> _searchHistoryResult.value = mappingQuery(result.data)
                 is Result.OnError -> {

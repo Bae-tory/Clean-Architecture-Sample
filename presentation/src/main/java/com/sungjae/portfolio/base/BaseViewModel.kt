@@ -19,11 +19,7 @@ abstract class BaseViewModel : ViewModel() {
         throwable.printStackTrace()
     }
 
-    /**
-     * Dispatchers 선언 (Normal Dispatchers + CoroutineExceptionHandler)
-     */
-    protected val ioDispatchers = Dispatchers.IO + coroutineExceptionHandler
-    protected val uiDispatchers = Dispatchers.Main + coroutineExceptionHandler
+    protected val exceptionDispatchers = Dispatchers.Main + coroutineExceptionHandler
 
     protected fun Disposable.addDisposable() {
         disposable.add(this)

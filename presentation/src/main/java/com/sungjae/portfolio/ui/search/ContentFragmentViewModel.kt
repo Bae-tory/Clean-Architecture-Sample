@@ -40,7 +40,7 @@ class ContentFragmentViewModel(
     val isResultEmptyError: LiveData<Boolean> = Transformations.map(searchQueryResultList) { it.isNullOrEmpty() }
 
     fun loadContents() {
-        viewModelScope.launch(ioDispatchers) {
+        viewModelScope.launch(exceptionDispatchers) {
             when (val result = getContentUseCase.execute(Pair(tab.name, searchQuery.value))) {
                 is Result.OnSuccess -> {
                     _searchQueryResultList.value = toDomain(result.data)
@@ -59,7 +59,7 @@ class ContentFragmentViewModel(
     }
 
     fun getCacheContents() {
-        viewModelScope.launch(ioDispatchers) {
+        viewModelScope.launch(exceptionDispatchers) {
             when (val result = getCacheContentUseCase.execute(tab.name)) {
                 is Result.OnSuccess -> {
                     _searchQueryResultList.value = toDomain(result.data)
@@ -78,7 +78,7 @@ class ContentFragmentViewModel(
     }
 
     fun loadContentByHistory(query: String) {
-        viewModelScope.launch(ioDispatchers) {
+        viewModelScope.launch(exceptionDispatchers) {
             when (val result = loadContentByHistoryUseCase.execute(Pair(tab.name, query))) {
                 is Result.OnSuccess -> {
                     _searchQueryResultList.value = toDomain(result.data)
