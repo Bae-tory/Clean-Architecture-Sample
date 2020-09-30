@@ -9,7 +9,6 @@ class GetContentQueriesUseCase(
     private val repository: Repository
 ) : ResultInputUseCase<List<String>, String>() {
 
-
     override suspend fun buildUseCaseInputResult(params: String): Result<List<String>>? {
         val tabName = params
         return when {

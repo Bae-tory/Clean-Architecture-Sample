@@ -10,7 +10,6 @@ class GetCacheContentUseCase(
     private val repository: Repository
 ) : ResultInputUseCase<ContentEntity, String>() {
 
-
     override suspend fun buildUseCaseInputResult(params: String): Result<ContentEntity>? {
         val tabName = params
         return when {
