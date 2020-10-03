@@ -3,20 +3,23 @@ package com.sungjae.portfolio.ui.search
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
-import androidx.lifecycle.viewModelScope
 import com.sungjae.portfolio.R
 import com.sungjae.portfolio.base.BaseViewModel
 import com.sungjae.portfolio.components.ItemClickListener
 import com.sungjae.portfolio.components.SingleLiveEvent
 import com.sungjae.portfolio.components.Tabs
 import com.sungjae.portfolio.domain.entity.request.ContentEntity
-import com.sungjae.portfolio.domain.exception.*
+import com.sungjae.portfolio.domain.exception.InvalidQueryBlankException
+import com.sungjae.portfolio.domain.exception.InvalidQueryException
+import com.sungjae.portfolio.domain.exception.InvalidSingleException
+import com.sungjae.portfolio.domain.exception.InvalidTabTypeException
 import com.sungjae.portfolio.domain.usecase.GetCacheContentUseCase
 import com.sungjae.portfolio.domain.usecase.GetContentUseCase
 import com.sungjae.portfolio.domain.usecase.LoadContentByHistoryUseCase
 import com.sungjae.portfolio.mapper.ContentPresenterMapper
 import com.sungjae.portfolio.models.ContentItem
-import kotlinx.coroutines.launch
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 
 
 class ContentFragmentViewModel(
@@ -41,7 +44,7 @@ class ContentFragmentViewModel(
 
     fun loadContents() {
         getContentUseCase
-            .execute(Pair(tab.name, searchQuery.value))
+            .execute(Pair(tab.name, searchQuery.value), Schedulers.io(), AndroidSchedulers.mainThread())
             .doOnSubscribe { _isShowLoadingProgressBar.value = true }
             .doAfterTerminate { _isShowLoadingProgressBar.value = false }
             .subscribe({
@@ -59,7 +62,7 @@ class ContentFragmentViewModel(
 
     fun getCacheContents() {
         getCacheContentUseCase
-            .execute(tab.name)
+            .execute(tab.name, Schedulers.io(), AndroidSchedulers.mainThread())
             .subscribe({
                 _searchQueryResultList.value = toDomain(it)
                 searchQuery.value = it.query
@@ -75,7 +78,7 @@ class ContentFragmentViewModel(
 
     fun loadContentByHistory(query: String) {
         loadContentByHistoryUseCase
-            .execute(Pair(tab.name, query))
+            .execute(Pair(tab.name, query), Schedulers.io(), AndroidSchedulers.mainThread())
             .subscribe({
                 _searchQueryResultList.value = toDomain(it)
                 searchQuery.value = it.query

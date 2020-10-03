@@ -10,6 +10,8 @@ import com.sungjae.portfolio.domain.exception.InvalidSingleException
 import com.sungjae.portfolio.domain.exception.InvalidTabTypeException
 import com.sungjae.portfolio.domain.usecase.GetContentQueriesUseCase
 import com.sungjae.portfolio.models.HistoryModel
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 
 class HistorySheetFragmentViewModel(
     private val tab: Tabs,
@@ -24,7 +26,7 @@ class HistorySheetFragmentViewModel(
 
     fun getSearchQueryHistory() =
         getContentQueriesUseCase
-            .execute(tab.name)
+            .execute(tab.name, Schedulers.io(), AndroidSchedulers.mainThread())
             .subscribe({
                 _searchHistoryResult.value = mappingQuery(it)
             }, {

@@ -16,5 +16,5 @@ abstract class SingleInvokeUseCase<T, in Params>(
             ?.subscribeOn(executorSchedulers)
             ?.observeOn(postExecutionScheduler) ?: Single.error(InvalidSingleException())
 
-    override fun execute(params: Params): Nothing? = null
+    override fun execute(params: Params, executorScheduler: Scheduler, postExcutionScheduler: Scheduler): Nothing? = null
 }
