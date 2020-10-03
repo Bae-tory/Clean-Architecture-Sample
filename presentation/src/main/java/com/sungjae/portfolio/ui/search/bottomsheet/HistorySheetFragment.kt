@@ -52,7 +52,7 @@ class HistorySheetFragment : BaseFragment<FragmentHistorySheetBinding, HistorySh
                     override fun onStateChanged(bottomSheet: View, newState: Int) {
                         backCallback.isEnabled = newState == STATE_EXPANDED
                         if (newState == STATE_EXPANDED) {
-                            vm?.getSearchQueryHistory()?.start()
+                            vm?.getSearchQueryHistory()
                         }
                     }
 

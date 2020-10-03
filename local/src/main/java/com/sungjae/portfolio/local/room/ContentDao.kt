@@ -12,15 +12,15 @@ import io.reactivex.Maybe
 interface ContentDao {
 
     @Query("SELECT * FROM contents WHERE (type LIKE :type) ORDER BY id DESC LIMIT 1")
-    suspend fun getContentCache(type: String): ContentLocal
+    fun getContentCache(type: String): Maybe<ContentLocal>
 
     @Query("SELECT `query` FROM contents WHERE (type LIKE :type) ORDER BY id DESC")
-    suspend fun getContentQuery(type: String): List<String>
+    fun getContentQuery(type: String): Maybe<List<String>>
 
     @Query("SELECT * FROM contents WHERE (type LIKE :type) AND (`query` LIKE :query)")
-    suspend fun getContents(type: String, query: String): ContentLocal
+    fun getContents(type: String, query: String): Maybe<ContentLocal>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertContent(contentLocal: ContentLocal)
+    fun insertContent(contentLocal: ContentLocal): Completable
 
 }

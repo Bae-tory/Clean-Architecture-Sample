@@ -12,16 +12,17 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
 class LoadContentByHistoryUseCase(
-    private val repository: Repository
-) : ResultInputUseCase<ContentEntity, Pair<String, String>>() {
+    private val repository: Repository,
+    executorScheduler: Scheduler = Schedulers.io(),
+    postExecutionScheduler: Scheduler = AndroidSchedulers.mainThread()
+) : SingleInputUseCase<ContentEntity, Pair<String, String>>(executorScheduler, postExecutionScheduler) {
 
-
-    override suspend fun buildUseCaseInputResult(params: Pair<String, String>): Result<ContentEntity>? {
+    override fun buildUseCaseInputSingle(params: Pair<String, String>): Single<ContentEntity>? {
         val tabName = params.first
         val query = params.second
 
         return when {
-            tabName.isEmpty() -> Result.OnError(InvalidTabTypeException())
+            tabName.isEmpty() -> Single.error(InvalidTabTypeException())
             else -> repository.getContents(type = tabName, query = query)
         }
     }

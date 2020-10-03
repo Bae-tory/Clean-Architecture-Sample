@@ -40,61 +40,54 @@ class ContentFragmentViewModel(
     val isResultEmptyError: LiveData<Boolean> = Transformations.map(searchQueryResultList) { it.isNullOrEmpty() }
 
     fun loadContents() {
-        viewModelScope.launch(ioDispatchers) {
-            when (val result = getContentUseCase.execute(Pair(tab.name, searchQuery.value))) {
-                is Result.OnSuccess -> {
-                    _searchQueryResultList.value = toDomain(result.data)
-                }
-                is Result.OnError -> {
-                    _errorMsg.value =
-                        when (result.exception) {
-                            is InvalidQueryException -> R.string.error_query_fail
-                            is InvalidSingleException -> R.string.error_single_fail
-                            is InvalidQueryBlankException -> R.string.please_write
-                            else -> R.string.error_load_fail
-                        }
-                }
-            }
-        }
+        getContentUseCase
+            .execute(Pair(tab.name, searchQuery.value))
+            .doOnSubscribe { _isShowLoadingProgressBar.value = true }
+            .doAfterTerminate { _isShowLoadingProgressBar.value = false }
+            .subscribe({
+                _searchQueryResultList.value = toDomain(it)
+            }, {
+                _errorMsg.value =
+                    when (it) {
+                        is InvalidQueryException -> R.string.error_query_fail
+                        is InvalidSingleException -> R.string.error_single_fail
+                        is InvalidQueryBlankException -> R.string.please_write
+                        else -> R.string.error_load_fail
+                    }
+            }).addDisposable()
     }
 
     fun getCacheContents() {
-        viewModelScope.launch(ioDispatchers) {
-            when (val result = getCacheContentUseCase.execute(tab.name)) {
-                is Result.OnSuccess -> {
-                    _searchQueryResultList.value = toDomain(result.data)
-                    searchQuery.value = result.data.query
-                }
-                is Result.OnError -> {
-                    _errorMsg.value =
-                        when (result.exception) {
-                            is InvalidSingleException -> R.string.error_single_fail
-                            is InvalidTabTypeException -> R.string.error_tab_fail
-                            else -> R.string.error_load_fail
-                        }
-                }
-            }
-        }
+        getCacheContentUseCase
+            .execute(tab.name)
+            .subscribe({
+                _searchQueryResultList.value = toDomain(it)
+                searchQuery.value = it.query
+            }, {
+                _errorMsg.value =
+                    when (it) {
+                        is InvalidSingleException -> R.string.error_single_fail
+                        is InvalidTabTypeException -> R.string.error_tab_fail
+                        else -> R.string.error_load_fail
+                    }
+            }).addDisposable()
     }
 
     fun loadContentByHistory(query: String) {
-        viewModelScope.launch(ioDispatchers) {
-            when (val result = loadContentByHistoryUseCase.execute(Pair(tab.name, query))) {
-                is Result.OnSuccess -> {
-                    _searchQueryResultList.value = toDomain(result.data)
-                    searchQuery.value = result.data.query
-                    loadContents()
+        loadContentByHistoryUseCase
+            .execute(Pair(tab.name, query))
+            .subscribe({
+                _searchQueryResultList.value = toDomain(it)
+                searchQuery.value = it.query
+                loadContents()
+            }, {
+                when (it) {
+                    is InvalidQueryException -> R.string.error_query_fail
+                    is InvalidTabTypeException -> R.string.error_tab_fail
+                    is InvalidSingleException -> R.string.error_single_fail
+                    else -> R.string.error_load_fail
                 }
-                is Result.OnError -> {
-                    when (result.exception) {
-                        is InvalidQueryException -> R.string.error_query_fail
-                        is InvalidTabTypeException -> R.string.error_tab_fail
-                        is InvalidSingleException -> R.string.error_single_fail
-                        else -> R.string.error_load_fail
-                    }
-                }
-            }
-        }
+            }).addDisposable()
     }
 
     override fun onClick(item: Any?) {

@@ -1,6 +1,8 @@
 package com.sungjae.portfolio.remote.models
 
 import com.google.gson.annotations.SerializedName
+import com.sungjae.portfolio.data.models.Content
+import com.sungjae.portfolio.data.models.ContentItem
 
 data class ContentResponse(
     var query: String,
@@ -37,3 +39,17 @@ data class ContentResponseItem(
     @SerializedName("originallink")
     val originallink: String = ""
 )
+
+fun ContentResponse.mapToContentData(): Content =
+    Content(
+        query = query,
+        contentItems = contentResponseItems.map {
+            ContentItem(
+                image = it.image,
+                actor = it.actor,
+                description = it.description,
+                title = it.title,
+                link = it.link
+            )
+        }
+    )
