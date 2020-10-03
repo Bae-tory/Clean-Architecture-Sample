@@ -1,4 +1,4 @@
-package com.sungjae.portfolio.remote.di
+package com.sungjae.portfolio.di
 
 import android.content.Context
 import com.google.gson.GsonBuilder

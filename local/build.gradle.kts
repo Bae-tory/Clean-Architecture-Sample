@@ -65,8 +65,8 @@ dependencies {
     implementation(Libs.ROOM_KTX)
     implementation(Libs.ROOM_RXJAVA2)
     kapt(Libs.ROOM_COMPILER)
-//    implementation(Libs.ROOM_ARC_PERSISTENCE_RUNTIME)
-//    kapt(Libs.ROOM_ARC_PERSISTENCE_COMPILER)
+    implementation(Libs.ROOM_ARC_PERSISTENCE_RUNTIME)
+    kapt(Libs.ROOM_ARC_PERSISTENCE_COMPILER)
     implementation(Libs.GSON)
 
     //DI

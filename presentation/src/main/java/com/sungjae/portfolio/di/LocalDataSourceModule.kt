@@ -1,4 +1,4 @@
-package com.sungjae.portfolio.local.di
+package com.sungjae.portfolio.di
 
 import android.content.Context
 import android.content.SharedPreferences

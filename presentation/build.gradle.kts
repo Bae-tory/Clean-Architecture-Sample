@@ -21,6 +21,13 @@ android {
         testInstrumentationRunner = Apps.TEST_INSTRUMENTATION_RUNNER
     }
 
+    configurations.all {
+        resolutionStrategy {
+            force("org.antlr:antlr4-runtime:4.7.1")
+            force("org.antlr:antlr4-tool:4.7.1")
+        }
+    }
+
     buildTypes {
         getByName(BuildTypes.DEBUG) {
             isDebuggable = true
@@ -59,6 +66,14 @@ dependencies {
     implementation(Libs.CORE_KTX)
     implementation(Libs.MATERIAL)
     implementation(Libs.CONSTRAINT_LAYOUT)
+
+    // Room
+    implementation(Libs.ROOM_RUNTIME)
+    implementation(Libs.ROOM_KTX)
+    implementation(Libs.ROOM_RXJAVA2)
+    kapt(Libs.ROOM_COMPILER)
+    implementation(Libs.ROOM_ARC_PERSISTENCE_RUNTIME)
+    kapt(Libs.ROOM_ARC_PERSISTENCE_COMPILER)
 
     //Retrofit
     implementation(Libs.RETROFIT2)

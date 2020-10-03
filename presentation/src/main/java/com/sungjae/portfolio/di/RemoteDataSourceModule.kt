@@ -1,4 +1,4 @@
-package com.sungjae.portfolio.remote.di
+package com.sungjae.portfolio.di
 
 import com.sungjae.portfolio.data.RemoteDataSource
 import com.sungjae.portfolio.remote.RemoteDataSourceImpl
