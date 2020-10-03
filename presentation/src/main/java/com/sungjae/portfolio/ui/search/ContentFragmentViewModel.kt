@@ -1,12 +1,12 @@
 package com.sungjae.portfolio.ui.search
 
+import android.util.Log
+import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.sungjae.portfolio.R
 import com.sungjae.portfolio.base.BaseViewModel
+import com.sungjae.portfolio.components.Constants.TAB_TYPE
 import com.sungjae.portfolio.components.ItemClickListener
 import com.sungjae.portfolio.components.SingleLiveEvent
 import com.sungjae.portfolio.components.Tabs
@@ -22,12 +22,14 @@ import kotlinx.coroutines.launch
 
 class ContentFragmentViewModel
 @ViewModelInject constructor(
-    private val tab: Tabs,
+    @Assisted private val savedStateHandle: SavedStateHandle,
     private val getContentUseCase: GetContentUseCase,
     private val getCacheContentUseCase: GetCacheContentUseCase,
     private val loadContentByHistoryUseCase: LoadContentByHistoryUseCase
-) : BaseViewModel(), ItemClickListener, ContentPresenterMapper<ContentEntity, ArrayList<ContentItem>> {
+) : BaseViewModel(), ItemClickListener,
+    ContentPresenterMapper<ContentEntity, ArrayList<ContentItem>> {
 
+    private val tab: Tabs = savedStateHandle.get<Tabs>(TAB_TYPE) as Tabs
     private val _searchQueryResultList = MutableLiveData<List<ContentItem>>()
     val searchQueryResultList: LiveData<List<ContentItem>> get() = _searchQueryResultList
 
@@ -37,12 +39,15 @@ class ContentFragmentViewModel
     private val _isShowLoadingProgressBar = MutableLiveData<Boolean>()
     val isShowLoadingProgressBar: LiveData<Boolean> get() = _isShowLoadingProgressBar
 
+
     val searchQuery = MutableLiveData<String>()
 
-    val isResultEmptyError: LiveData<Boolean> = Transformations.map(searchQueryResultList) { it.isNullOrEmpty() }
+    val isResultEmptyError: LiveData<Boolean> =
+        Transformations.map(searchQueryResultList) { it.isNullOrEmpty() }
 
     fun loadContents() {
         viewModelScope.launch(exceptionDispatchers) {
+            Log.d("ContentFragmentVM", tab.name)
             when (val result = getContentUseCase.execute(Pair(tab.name, searchQuery.value))) {
                 is Result.OnSuccess -> {
                     _searchQueryResultList.value = toDomain(result.data)

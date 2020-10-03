@@ -4,6 +4,7 @@ import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.doOnLayout
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_COLLAPSED
@@ -12,6 +13,7 @@ import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.shape.ShapeAppearanceModel
 import com.sungjae.portfolio.R
 import com.sungjae.portfolio.base.BaseFragment
+import com.sungjae.portfolio.components.Constants
 import com.sungjae.portfolio.components.Tabs
 import com.sungjae.portfolio.databinding.FragmentHistorySheetBinding
 import com.sungjae.portfolio.extensions.addCallback
@@ -21,11 +23,15 @@ import com.sungjae.portfolio.ui.search.ContentFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class HistorySheetFragment : BaseFragment<FragmentHistorySheetBinding, HistorySheetFragmentViewModel>(R.layout.fragment_history_sheet) {
+class HistorySheetFragment :
+    BaseFragment<FragmentHistorySheetBinding, HistorySheetFragmentViewModel>(R.layout.fragment_history_sheet) {
 
-    override val vm: HistorySheetFragmentViewModel by viewModel { parametersOf(getTab()) }
+    private val tab: Tabs = (requireParentFragment() as? ContentFragment)?.tab ?: error(
+        getString(R.string.wrong_enum_type)
+    )
 
-    private fun getTab(): Tabs = (requireParentFragment() as? ContentFragment)?.tab ?: error(getString(R.string.wrong_enum_type))
+    override val vm: HistorySheetFragmentViewModel by viewModels()
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -37,10 +43,17 @@ class HistorySheetFragment : BaseFragment<FragmentHistorySheetBinding, HistorySh
                 }
 
             val historyStartColor = historySheet.context.getColor(R.color.history_200)
-            val historyEndColor = historySheet.context.getColorStateList(R.color.history_200).defaultColor
+            val historyEndColor =
+                historySheet.context.getColorStateList(R.color.history_200).defaultColor
 
             val sheetBackground =
-                MaterialShapeDrawable(ShapeAppearanceModel.builder(context, R.style.ShapeAppearance_History_MinimizedSheet, 0).build()).apply {
+                MaterialShapeDrawable(
+                    ShapeAppearanceModel.builder(
+                        context,
+                        R.style.ShapeAppearance_History_MinimizedSheet,
+                        0
+                    ).build()
+                ).apply {
                     fillColor = ColorStateList.valueOf(historyStartColor)
                 }
             historySheet.background = sheetBackground

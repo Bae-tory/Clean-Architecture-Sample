@@ -17,13 +17,4 @@ object ResourceProviderModule {
     @Singleton
     fun provideResourceProvider(@ApplicationContext context: Context): ResourceProviderImpl =
         ResourceProviderImpl(context)
-
 }
-/*
-val viewModelModule = module {
-    viewModel { ContentViewModel() }
-    viewModel { (tab: Tabs) -> ContentFragmentViewModel(tab, get(), get(), get()) }
-    viewModel { (tab: Tabs) -> HistorySheetFragmentViewModel(tab, get()) }
-    viewModel { TabFragmentViewModel() }
-}
-*/

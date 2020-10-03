@@ -1,12 +1,12 @@
 package com.sungjae.portfolio.ui.search.bottomsheet
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.sungjae.portfolio.R
 import com.sungjae.portfolio.base.BaseViewModel
 import com.sungjae.portfolio.components.ItemClickListener
-import com.sungjae.portfolio.components.Tabs
 import com.sungjae.portfolio.domain.exception.InvalidSingleException
 import com.sungjae.portfolio.domain.exception.InvalidTabTypeException
 import com.sungjae.portfolio.domain.exception.Result
@@ -14,8 +14,7 @@ import com.sungjae.portfolio.domain.usecase.GetContentQueriesUseCase
 import com.sungjae.portfolio.models.HistoryModel
 import kotlinx.coroutines.launch
 
-class HistorySheetFragmentViewModel(
-    private val tab: Tabs,
+class HistorySheetFragmentViewModel @ViewModelInject constructor(
     private val getContentQueriesUseCase: GetContentQueriesUseCase
 ) : BaseViewModel(), ItemClickListener {
 
@@ -27,7 +26,7 @@ class HistorySheetFragmentViewModel(
 
     fun getSearchQueryHistory() =
         viewModelScope.launch(exceptionDispatchers) {
-            when (val result = getContentQueriesUseCase.execute(tab.name)) {
+            when (val result = getContentQueriesUseCase.execute("tab.name")) {
                 is Result.OnSuccess -> _searchHistoryResult.value = mappingQuery(result.data)
                 is Result.OnError -> {
                     _errorMsg.value =

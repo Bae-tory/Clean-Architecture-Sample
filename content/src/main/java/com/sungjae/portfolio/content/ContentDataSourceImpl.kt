@@ -1,13 +1,15 @@
 package com.sungjae.portfolio.content
 
 import android.annotation.SuppressLint
-import android.app.Application
+import android.content.Context
 import android.os.Build
 import android.provider.Settings
 import com.sungjae.portfolio.data.ContentDataSource
+import javax.inject.Inject
 
 @SuppressLint("HardwareIds")
-class ContentDataSourceImpl(private val context: Application) : ContentDataSource {
+class ContentDataSourceImpl @Inject constructor(private val context: Context) :
+    ContentDataSource {
 
     override fun getDeviceId(): String? {
         return Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)

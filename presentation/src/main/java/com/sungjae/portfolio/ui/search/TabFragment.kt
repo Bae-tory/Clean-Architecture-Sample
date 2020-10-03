@@ -2,6 +2,7 @@ package com.sungjae.portfolio.ui.search
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.viewModels
 import com.google.android.material.tabs.TabLayout
 import com.sungjae.portfolio.R
 import com.sungjae.portfolio.base.BaseFragment
@@ -9,12 +10,11 @@ import com.sungjae.portfolio.components.Tabs
 import com.sungjae.portfolio.databinding.FragmentTabBinding
 import com.sungjae.portfolio.ui.PagerAdapter
 import dagger.hilt.android.AndroidEntryPoint
-import org.koin.android.viewmodel.ext.android.viewModel
 
 @AndroidEntryPoint
 class TabFragment : BaseFragment<FragmentTabBinding, TabFragmentViewModel>(R.layout.fragment_tab) {
 
-    override val vm: TabFragmentViewModel by viewModel()
+    override val vm: TabFragmentViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

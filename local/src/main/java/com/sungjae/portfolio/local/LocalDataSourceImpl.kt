@@ -1,6 +1,7 @@
 package com.sungjae.portfolio.local
 
 import android.content.SharedPreferences
+import android.util.Log
 import androidx.core.content.edit
 import com.sungjae.portfolio.data.LocalDataSource
 import com.sungjae.portfolio.data.models.Content
@@ -11,14 +12,20 @@ import com.sungjae.portfolio.local.extensions.convertToGson
 import com.sungjae.portfolio.local.extensions.convertToJson
 import com.sungjae.portfolio.local.mapper.ContentLocalMapper
 import com.sungjae.portfolio.local.room.ContentDao
-import com.sungjae.portfolio.local.room.ContentLocal
+import com.sungjae.portfolio.local.room.RoomDataEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class LocalDataSourceImpl(
+class LocalDataSourceImpl @Inject constructor(
     private val pref: SharedPreferences,
     private val contentDao: ContentDao
-) : LocalDataSource, ContentLocalMapper<ContentLocal, ContentEntity, Content> {
+) : LocalDataSource, ContentLocalMapper<RoomDataEntity.Content, ContentEntity, Content> {
+
+    init {
+        Log.d("ClassInit","LocalDataSourceImpl")
+    }
 
     override suspend fun getCacheContents(type: String): Result<ContentEntity> =
         withContext(Dispatchers.IO) {
@@ -47,12 +54,23 @@ class LocalDataSourceImpl(
             }
         }
 
-    override suspend fun saveContents(type: String, query: String, response: Result<Content>): Result<Unit> =
+    override suspend fun saveContents(
+        type: String,
+        query: String,
+        response: Result<Content>
+    ): Result<Unit> =
         withContext(Dispatchers.IO) {
             try {
                 when (response) {
                     is Result.OnSuccess -> {
-                        Result.OnSuccess(contentDao.insertContent(response.data.fromData(type, query)))
+                        Result.OnSuccess(
+                            contentDao.insertContent(
+                                response.data.fromData(
+                                    type,
+                                    query
+                                )
+                            )
+                        )
                     }
                     is Result.OnError -> throw Exception("saveContents Error")
                 }
@@ -96,14 +114,14 @@ class LocalDataSourceImpl(
         }
     }
 
-    override fun ContentLocal.toDomain(): ContentEntity =
+    override fun RoomDataEntity.Content.toDomain(): ContentEntity =
         ContentEntity(
             this.query,
             convertToGson<ContentEntityItem>(convertToJson(this.list)).toList()
         )
 
-    override fun Content.fromData(type: String, query: String): ContentLocal =
-        ContentLocal(
+    override fun Content.fromData(type: String, query: String): RoomDataEntity.Content =
+        RoomDataEntity.Content(
             id = System.currentTimeMillis(),
             list = this.contentItems,
             type = type,

@@ -1,8 +1,8 @@
 plugins {
     id("com.android.application")
     kotlin("android")
-    kotlin("android.extensions")
     kotlin("kapt")
+    kotlin("android.extensions")
     id("dagger.hilt.android.plugin")
 //    id("com.google.gms.google-services")
 //    id("com.google.firebase.crashlytics")
@@ -83,6 +83,7 @@ dependencies {
     implementation(Libs.HILT_VIEWMODEL)
     implementation(Libs.HILT_COMMON)
     kapt(Libs.HILT_COMPILER)
+    implementation(Libs.FRAGMENT_KTX)
 
     //Firebase
     implementation(Libs.FIREBASE_MESSAGING)

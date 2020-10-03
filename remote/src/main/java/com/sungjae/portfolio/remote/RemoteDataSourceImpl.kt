@@ -10,8 +10,11 @@ import com.sungjae.portfolio.remote.mapper.RemoteMapper
 import com.sungjae.portfolio.remote.models.ContentResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class RemoteDataSourceImpl(private val api: Api) : RemoteDataSource, RemoteMapper<ContentResponse, Content> {
+class RemoteDataSourceImpl @Inject constructor(
+    private val api: Api
+) : RemoteDataSource, RemoteMapper<ContentResponse, Content> {
     override suspend fun getRemoteContents(type: String, query: String): Result<Content> =
         withContext(Dispatchers.IO) {
             try {

@@ -1,28 +1,43 @@
 package com.sungjae.portfolio.local.di
 
-import android.app.Application
+import android.content.Context
 import android.content.SharedPreferences
 import androidx.room.Room
 import com.sungjae.portfolio.data.LocalDataSource
 import com.sungjae.portfolio.local.LocalDataSourceImpl
+import com.sungjae.portfolio.local.room.ContentDao
 import com.sungjae.portfolio.local.room.ContentDataBase
-import org.koin.android.ext.koin.androidApplication
+import com.sungjae.portfolio.local.room.ContentDataBase.Companion.DB_NAME
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ApplicationComponent
+import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Singleton
 
-val localDataSourceModule = module {
 
-    single<SharedPreferences> {
-        getSharedPref(androidApplication())
-    }
+@Module
+@InstallIn(ApplicationComponent::class)
+object LocalDataSourceModule {
+    @Provides
+    @Singleton
+    fun provideContentDataBase(@ApplicationContext context: Context): ContentDataBase =
+        Room.databaseBuilder(context, ContentDataBase::class.java, DB_NAME)
+            .fallbackToDestructiveMigration()
+            .build()
 
-    single { Room.databaseBuilder(androidApplication(), ContentDataBase::class.java, "Contents.db").build() }
+    @Provides
+    @Singleton
+    fun provideContentDao(contentDataBase: ContentDataBase): ContentDao =
+        contentDataBase.contentDao()
 
-    single { get<ContentDataBase>().contentDao() }
+    @Provides
+    @Singleton
+    fun provideLocalDataSoruce(pref: SharedPreferences, contentDao: ContentDao): LocalDataSource =
+        LocalDataSourceImpl(pref, contentDao)
 
-    single<LocalDataSource> {
-        LocalDataSourceImpl(get(), get())
-    }
-}
-
-fun getSharedPref(androidApplication: Application): SharedPreferences {
-    return androidApplication.getSharedPreferences("pref", android.content.Context.MODE_PRIVATE)
+    @Provides
+    @Singleton
+    fun provideSharedPreference(@ApplicationContext context: Context): SharedPreferences =
+        context.getSharedPreferences("pref", Context.MODE_PRIVATE)
 }

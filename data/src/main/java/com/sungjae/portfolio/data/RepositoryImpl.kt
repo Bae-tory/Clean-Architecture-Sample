@@ -8,8 +8,9 @@ import com.sungjae.portfolio.domain.entity.request.ContentEntityItem
 import com.sungjae.portfolio.domain.exception.Result
 import com.sungjae.portfolio.domain.repository.Repository
 import com.sungjae.portfolio.mapper.ContentDataMapper
+import javax.inject.Inject
 
-class RepositoryImpl(
+class RepositoryImpl @Inject constructor(
     private val localDataSource: LocalDataSource,
     private val remoteDataSource: RemoteDataSource,
     private val contentDataSource: ContentDataSource

@@ -13,22 +13,22 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(ApplicationComponent::class)
-object UserCaseModule {
+object UseCaseModule {
 
     @Provides
-    @Singleton
-    fun provideGetContentUseCase(repository: Repository): GetContentUseCase = GetContentUseCase(repository)
+    fun provideGetContentUseCase(repository: Repository): GetContentUseCase =
+        GetContentUseCase(repository)
 
     @Provides
-    @Singleton
-    fun provideGetCacheContentUseCase(repository: Repository): GetCacheContentUseCase = GetCacheContentUseCase(repository)
+    fun provideGetCacheContentUseCase(repository: Repository): GetCacheContentUseCase =
+        GetCacheContentUseCase(repository)
 
     @Provides
-    @Singleton
-    fun provideLoadContentByHistoryUseCase(repository: Repository): LoadContentByHistoryUseCase = LoadContentByHistoryUseCase(repository)
+    fun provideLoadContentByHistoryUseCase(repository: Repository): LoadContentByHistoryUseCase =
+        LoadContentByHistoryUseCase(repository)
 
     @Provides
-    @Singleton
-    fun provideGetContentQueriesUseCase(repository: Repository): GetContentQueriesUseCase = GetContentQueriesUseCase(repository)
+    fun provideGetContentQueriesUseCase(repository: Repository): GetContentQueriesUseCase =
+        GetContentQueriesUseCase(repository)
 
 }

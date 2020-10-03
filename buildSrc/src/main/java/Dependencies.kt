@@ -45,7 +45,9 @@ object Versions {
     const val RX_ANDROID: String = "2.1.1"
     const val RX_KOTLIN: String = "2.4.0"
     const val LIFECYCLE_VIEWMODEL_KTX = "2.2.0"
+    const val FRAGMENT_KTX = "1.2.5"
     const val ROOM: String = "2.2.5"
+    const val ROOM_ARC_PERSISTENCE = "1.1.1"
     const val PICASSO: String = "2.71828"
     const val GLIDE: String = "4.11.0"
     const val GLIDE_OKHTTP_INTERGRATION: String = "4.9.0"
@@ -68,7 +70,8 @@ object Versions {
 
 object Libs {
     const val KOTLIN = "org.jetbrains.kotlin:kotlin-stdlib:${Versions.KOTLIN}"
-    const val CONSTRAINT_LAYOUT = "androidx.constraintlayout:constraintlayout:${Versions.CONSTRAINT_LAYOUT}"
+    const val CONSTRAINT_LAYOUT =
+        "androidx.constraintlayout:constraintlayout:${Versions.CONSTRAINT_LAYOUT}"
     const val CORE_KTX = "androidx.core:core-ktx:${Versions.CORE_KTX}"
     const val APP_COMPAT = "androidx.appcompat:appcompat:${Versions.APP_COMPAT}"
     const val ANNOTATION = "androidx.annotation:annotation:${Versions.ANNOTATION}"
@@ -79,22 +82,38 @@ object Libs {
     const val OKHTTP3 = "com.squareup.okhttp3:okhttp:${Versions.OKHTTP3}"
     const val LOGGING_INTERCEPTORS = "com.squareup.okhttp3:logging-interceptor:${Versions.OKHTTP3}"
     const val CONVERTER_GSON = "com.squareup.retrofit2:converter-gson:${Versions.CONVERTER_GSON}"
-    const val ADAPTER_RXJAVA2 = "com.squareup.retrofit2:adapter-rxjava2:${Versions.ADAPTER_RX_JAVA2}"
+    const val ADAPTER_RXJAVA2 =
+        "com.squareup.retrofit2:adapter-rxjava2:${Versions.ADAPTER_RX_JAVA2}"
     const val GSON = "com.google.code.gson:gson:${Versions.GSON}"
     const val RX_JAVA2 = "io.reactivex.rxjava2:rxjava:${Versions.RX_JAVA2}"
     const val RX_ANDROID = "io.reactivex.rxjava2:rxandroid:${Versions.RX_ANDROID}"
     const val RX_KOTLIN = "io.reactivex.rxjava2:rxkotlin:${Versions.RX_KOTLIN}"
+
+    /*
+    * implementation "androidx.room:room-runtime:2.3.0-alpha02"
+kapt "androidx.room:room-compiler:2.3.0-alpha02"
+implementation "android.arch.persistence.room:runtime:1.1.1"
+kapt "android.arch.persistence.room:compiler:1.1.1"
+    * */
     const val ROOM_RUNTIME = "androidx.room:room-runtime:${Versions.ROOM}"
     const val ROOM_KTX = "androidx.room:room-ktx:${Versions.ROOM}"
     const val ROOM_RXJAVA2 = "androidx.room:room-rxjava2:${Versions.ROOM}"
     const val ROOM_COMPILER = "androidx.room:room-compiler:${Versions.ROOM}"
+    const val ROOM_ARC_PERSISTENCE_RUNTIME =
+        "android.arch.persistence.room:runtime:${Versions.ROOM_ARC_PERSISTENCE}"
+    const val ROOM_ARC_PERSISTENCE_COMPILER =
+        "android.arch.persistence.room:compiler:${Versions.ROOM_ARC_PERSISTENCE}"
     const val PICASSO = "com.squareup.picasso:picasso:${Versions.PICASSO}"
     const val GLIDE = "com.github.bumptech.glide:glide:${Versions.GLIDE}"
     const val GLIDE_COMPILER = "com.github.bumptech.glide:compiler:${Versions.GLIDE}"
-    const val GLIDE_OKHTTP_INTERGRATION = "com.github.bumptech.glide:okhttp3-integration:${Versions.GLIDE_OKHTTP_INTERGRATION}"
+    const val GLIDE_OKHTTP_INTERGRATION =
+        "com.github.bumptech.glide:okhttp3-integration:${Versions.GLIDE_OKHTTP_INTERGRATION}"
     const val COROUTINE_CORE = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.COROUTINE}"
-    const val COROUTINE_ANDROID = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.COROUTINE}"
-    const val LIFECYCLE_VIEWMODEL_KTX = "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.LIFECYCLE_VIEWMODEL_KTX}"
+    const val COROUTINE_ANDROID =
+        "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.COROUTINE}"
+    const val LIFECYCLE_VIEWMODEL_KTX =
+        "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.LIFECYCLE_VIEWMODEL_KTX}"
+    const val FRAGMENT_KTX = "androidx.fragment:fragment-ktx:${Versions.FRAGMENT_KTX}"
     const val KOIN = "org.koin:koin-android:${Versions.KOIN}"
     const val KOIN_SCOPE = "org.koin:koin-android-scope:${Versions.KOIN}"
     const val KOIN_VIEWMODEL = "org.koin:koin-android-viewmodel:${Versions.KOIN}"
@@ -103,13 +122,17 @@ object Libs {
     const val HILT_COMMON = "androidx.hilt:hilt-common:${Versions.HILT_LIFECYCLE}"
     const val HILT_VIEWMODEL = "androidx.hilt:hilt-lifecycle-viewmodel:${Versions.HILT_LIFECYCLE}"
     const val HILT_COMPILER = "androidx.hilt:hilt-compiler:${Versions.HILT_LIFECYCLE}"
-    const val FIREBASE_MESSAGING = "com.google.firebase:firebase-messaging:${Versions.FIREBASE_MESSAGING}"
+    const val FIREBASE_MESSAGING =
+        "com.google.firebase:firebase-messaging:${Versions.FIREBASE_MESSAGING}"
     const val FIREBASE_CORE = "com.google.firebase:firebase-core:${Versions.FIREBASE_CORE}"
-    const val FIREBASE_ANALYTICS = "com.google.firebase:firebase-analytics:${Versions.FIREBASE_ANALYTICS}"
-    const val FIREBASE_CRASHLYTICS = "com.google.firebase:firebase-crashlytics:${Versions.FIREBASE_CRASHLYTICS}"
+    const val FIREBASE_ANALYTICS =
+        "com.google.firebase:firebase-analytics:${Versions.FIREBASE_ANALYTICS}"
+    const val FIREBASE_CRASHLYTICS =
+        "com.google.firebase:firebase-crashlytics:${Versions.FIREBASE_CRASHLYTICS}"
     const val LOGGER = "com.orhanobut:logger:${Versions.LOGGER}"
     const val GOOGLE_MAPS = "com.google.android.gms:play-services-maps:${Versions.GOOGLE_MAP}"
-    const val GOOGLE_LOCATION = "com.google.android.gms:play-services-location:${Versions.GOOGLE_MAP}"
+    const val GOOGLE_LOCATION =
+        "com.google.android.gms:play-services-location:${Versions.GOOGLE_MAP}"
 }
 
 object TestLibs {
