@@ -2,7 +2,9 @@ package com.sungjae.portfolio.ui.search.bottomsheet
 
 import android.content.res.ColorStateList
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.core.view.doOnLayout
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -13,7 +15,7 @@ import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.shape.ShapeAppearanceModel
 import com.sungjae.portfolio.R
 import com.sungjae.portfolio.base.BaseFragment
-import com.sungjae.portfolio.components.Constants
+import com.sungjae.portfolio.components.Constants.TAB_TYPE
 import com.sungjae.portfolio.components.Tabs
 import com.sungjae.portfolio.databinding.FragmentHistorySheetBinding
 import com.sungjae.portfolio.extensions.addCallback
@@ -26,15 +28,11 @@ import dagger.hilt.android.AndroidEntryPoint
 class HistorySheetFragment :
     BaseFragment<FragmentHistorySheetBinding, HistorySheetFragmentViewModel>(R.layout.fragment_history_sheet) {
 
-    private val tab: Tabs = (requireParentFragment() as? ContentFragment)?.tab ?: error(
-        getString(R.string.wrong_enum_type)
-    )
-
     override val vm: HistorySheetFragmentViewModel by viewModels()
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.d("HistoryFragment","onViewCreated")
         bind {
             val behavior = BottomSheetBehavior.from(historySheet)
             val backCallback =
@@ -110,5 +108,11 @@ class HistorySheetFragment :
                 BottomSheetBehavior.from(binding.historySheet).state = STATE_COLLAPSED
             })
         } // end of bind
+    }
+
+    companion object {
+        fun newInstance(type: Tabs) = HistorySheetFragment().apply {
+            arguments = bundleOf(TAB_TYPE to type)
+        }
     }
 }

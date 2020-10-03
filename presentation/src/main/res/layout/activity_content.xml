@@ -15,7 +15,7 @@
         android:layout_height="match_parent"
         tools:context=".ui.search.ContentActivity">
 
-        <fragment
+        <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fragment_search"
             android:name="com.sungjae.portfolio.ui.search.TabFragment"
             android:layout_width="match_parent"

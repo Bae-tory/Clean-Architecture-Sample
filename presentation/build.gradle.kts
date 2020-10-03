@@ -21,13 +21,6 @@ android {
         testInstrumentationRunner = Apps.TEST_INSTRUMENTATION_RUNNER
     }
 
-    configurations.all {
-        resolutionStrategy {
-            force("org.antlr:antlr4-runtime:4.7.1")
-            force("org.antlr:antlr4-tool:4.7.1")
-        }
-    }
-
     buildTypes {
         getByName(BuildTypes.DEBUG) {
             isDebuggable = true

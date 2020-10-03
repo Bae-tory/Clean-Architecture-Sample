@@ -85,12 +85,21 @@
             app:layout_constraintVertical_weight="9"
             tools:listitem="@layout/item_rv_content" />
 
-        <fragment
-            android:id="@+id/fragment_history_sheet"
-            android:name="com.sungjae.portfolio.ui.search.bottomsheet.HistorySheetFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:layout="@layout/fragment_history_sheet" />
+        <FrameLayout
+            android:id="@+id/history_sheet_fragment_container"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!--        <androidx.fragment.app.FragmentContainerView-->
+        <!--            android:id="@+id/fragment_history_sheet"-->
+        <!--            android:name="com.sungjae.portfolio.ui.search.bottomsheet.HistorySheetFragment"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="match_parent"-->
+        <!--            tools:layout="@layout/fragment_history_sheet" />-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
