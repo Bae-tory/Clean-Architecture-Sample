@@ -53,7 +53,7 @@
  - https://github.com/sunghyunzz/android-clean-architecture-example
  - https://github.com/sjjeong/SimpleRecyclerView
 
-### License
+### License of Reference
 --------
 
     Copyright 2019 Dino
