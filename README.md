@@ -4,7 +4,7 @@
 #### Please tell us about the capping technique with ``Issue`` or ``Pull Request``</br>
 ##### 배토리의 클린 아키텍쳐 샘플입니다.:stuck_out_tongue_closed_eyes:</br>
 ##### 조금이라도 도움이 되었다면 :star: 부탁드립니다.</br>
-##### 이상한 부분은 언제든지 ``Issue``나 ``Pull Request``로 알려주시면 감사하겠습니다.
+##### 이상한 부분이 있다면, 언제든지 ``Issue``나 ``Pull Request``로 알려주시면 감사하겠습니다.
 
 ## :arrow_forward: <i>Platform</i>
 ### :dizzy: Android
