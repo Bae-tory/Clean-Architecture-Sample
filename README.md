@@ -3,13 +3,6 @@
 #### If this repo helps a little, please give me a :star:</br>
 #### Please tell us about the capping technique with ``Issue`` or ``Pull Request``</br>
 
-
-## :arrow_forward: <i>Platform</i>
-### :dizzy: Android
-
-## :speech_balloon: <i>Language</i>
- - ### Kotlin 
-
 ## :large_orange_diamond: <i>Module & Design Pattern</i>
   - #### UI & Presentation
   - #### DataRepository
