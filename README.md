@@ -1,7 +1,4 @@
 # Clean-Architecure-Sample
-#### This is Clean-Architecture-Sample of Baetory :smiley:</br>
-#### If this repo helps a little, please give me a :star:</br>
-#### Please tell us about the capping technique with ``Issue`` or ``Pull Request``</br>
 
 ## :large_orange_diamond: <i>Module & Design Pattern</i>
   - #### UI & Presentation
